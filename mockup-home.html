@@ -1,0 +1,1601 @@
+<title>LvlUp Gaming Lounge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+
+<style>
+  :root {
+    --room: #121315;
+    --room-deep: #0C0D0F;
+    --surface: #1B1D20;
+    --surface-hi: #23262A;
+    --lamp: #C8763A;
+    --screen: #5C86B4;
+    --paper: #E8E3DC;
+    --dim: #8A8781;
+    --dimmer: #5E5C58;
+    --edge: rgba(232, 227, 220, 0.10);
+    --edge-hi: rgba(232, 227, 220, 0.18);
+
+    --sans: "Geist", "Helvetica Neue", Arial, sans-serif;
+    --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+    --shell: 78rem;
+    --pad: clamp(1.15rem, 4vw, 3rem);
+    --radius: 14px;
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--room);
+    color: var(--paper);
+    font-family: var(--sans);
+    font-size: 1rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    /* clip, not hidden — hidden would make body a scroll container and break sticky */
+    overflow-x: clip;
+  }
+
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    pointer-events: none;
+    opacity: 0.26;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  }
+
+  h1, h2, h3, h4 { margin: 0; font-weight: 600; letter-spacing: -0.028em; line-height: 1.08; text-wrap: balance; }
+  p { margin: 0; }
+  ul, ol { margin: 0; padding: 0; list-style: none; }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--lamp); outline-offset: 3px; border-radius: 4px; }
+
+  .shell { width: 100%; max-width: var(--shell); margin: 0 auto; padding-inline: var(--pad); }
+
+  .label {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+  /* ---------------- notice strip ---------------- */
+
+  .strip {
+    position: relative;
+    z-index: 45;
+    background: var(--room-deep);
+    border-bottom: 1px solid var(--edge);
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    color: var(--dimmer);
+  }
+
+  .strip .shell { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 0.55rem; }
+  .strip button { color: var(--dimmer); font-size: 0.7rem; font-family: var(--mono); }
+  .strip button:hover { color: var(--paper); }
+
+  /* ---------------- nav ---------------- */
+
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: rgba(18, 19, 21, 0.66);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    border-bottom: 1px solid var(--edge);
+    box-shadow: inset 0 1px 0 rgba(232, 227, 220, 0.07);
+  }
+
+  .nav .shell { display: flex; align-items: center; gap: 1.5rem; padding-block: 0.9rem; }
+
+  .wordmark { font-size: 1.15rem; font-weight: 700; letter-spacing: -0.04em; margin-right: auto; }
+  .wordmark span { color: var(--lamp); }
+
+  .nav-links { display: flex; gap: 1.6rem; }
+  .nav-links a { font-size: 0.9rem; color: var(--dim); transition: color 0.25s var(--ease); }
+  .nav-links a:hover { color: var(--paper); }
+
+  @media (max-width: 60rem) { .nav-links { display: none; } }
+
+  /* ---------------- buttons ---------------- */
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.75rem 1.15rem;
+    border-radius: 10px;
+    font-size: 0.92rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    transition: transform 0.25s var(--ease), background-color 0.25s, border-color 0.25s;
+  }
+
+  .btn:active { transform: scale(0.98); }
+
+  .btn-primary {
+    background: var(--lamp);
+    color: #17100A;
+    font-weight: 600;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  }
+
+  .btn-primary:hover { background: #D68345; }
+  .btn-ghost { border: 1px solid var(--edge-hi); color: var(--paper); }
+  .btn-ghost:hover { border-color: var(--paper); }
+  .btn svg { width: 17px; height: 17px; flex: none; }
+
+  /* ---------------- hero + 3D stage ---------------- */
+
+  .hero { position: relative; overflow: hidden; border-bottom: 1px solid var(--edge); }
+
+  .stage { position: absolute; inset: 0; }
+
+  /* painted first, always visible, never replaced by a blank frame */
+  .stage-fallback {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(58% 52% at 74% 26%, rgba(200, 118, 58, 0.34) 0%, rgba(200, 118, 58, 0) 62%),
+      radial-gradient(52% 46% at 22% 74%, rgba(92, 134, 180, 0.24) 0%, rgba(92, 134, 180, 0) 64%),
+      linear-gradient(178deg, #191B1E 0%, var(--room) 82%);
+  }
+
+  #stage-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    opacity: 0;
+    transition: opacity 1.1s var(--ease);
+  }
+
+  #stage-canvas.lit { opacity: 1; }
+
+  .hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(96deg, var(--room) 4%, rgba(18,19,21,0.82) 34%, rgba(18,19,21,0.18) 68%, rgba(18,19,21,0.55) 100%);
+    pointer-events: none;
+  }
+
+  @media (max-width: 60rem) {
+    .hero::after { background: linear-gradient(to bottom, rgba(18,19,21,0.45) 0%, rgba(18,19,21,0.78) 52%, var(--room) 100%); }
+  }
+
+  .hero .shell { position: relative; z-index: 2; }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+    min-height: clamp(30rem, 78vh, 44rem);
+    padding-block: clamp(3.25rem, 8vw, 6rem);
+  }
+
+  .hero-copy { display: flex; flex-direction: column; gap: 1.5rem; align-items: flex-start; }
+
+  .status { display: inline-flex; align-items: center; gap: 0.6rem; }
+
+  .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #6FCF97;
+    animation: breathe 2.8s ease-in-out infinite;
+  }
+
+  @keyframes breathe {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(111, 207, 151, 0.45); }
+    50% { box-shadow: 0 0 0 6px rgba(111, 207, 151, 0); }
+  }
+
+  .hero h1 { font-size: clamp(2.25rem, 5vw, 3.8rem); max-width: 15ch; }
+  .hero-sub { font-size: clamp(1rem, 1.6vw, 1.1rem); color: var(--dim); max-width: 44ch; }
+  .hero-sub b { color: var(--paper); font-weight: 500; }
+
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+
+  .hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.4rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--edge);
+    width: 100%;
+    font-size: 0.86rem;
+    color: var(--dim);
+  }
+
+  .hero-meta b { color: var(--paper); font-weight: 500; }
+
+  /* floating price card, sits in the 3D column */
+  .hero-card { justify-self: end; align-self: center; perspective: 900px; }
+
+  .hero-card-inner {
+    width: min(19rem, 100%);
+    background: rgba(27, 29, 32, 0.62);
+    backdrop-filter: blur(18px) saturate(150%);
+    -webkit-backdrop-filter: blur(18px) saturate(150%);
+    border: 1px solid var(--edge-hi);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    box-shadow: inset 0 1px 0 rgba(232, 227, 220, 0.12), 0 24px 60px -24px rgba(0, 0, 0, 0.75);
+    transform-style: preserve-3d;
+    transition: transform 0.4s var(--ease);
+  }
+
+  .hero-card-rows { display: flex; flex-direction: column; }
+
+  .hero-card-rows div {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 1rem;
+    padding: 0.55rem 0;
+    border-bottom: 1px solid var(--edge);
+    font-size: 0.9rem;
+  }
+
+  .hero-card-rows div:last-child { border-bottom: 0; }
+  .hero-card-rows dt { color: var(--dim); }
+  .hero-card-rows dd { margin: 0; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+  .hero-card-rows dd.hot { color: var(--lamp); font-weight: 600; }
+
+  @media (max-width: 60rem) {
+    .hero-grid { grid-template-columns: 1fr; min-height: 0; align-items: start; }
+    .hero-card { justify-self: stretch; }
+    .hero-card-inner { width: 100%; }
+  }
+
+  /* ---------------- section frame ---------------- */
+
+  section.band { position: relative; z-index: 1; background: var(--room); padding-block: clamp(3.25rem, 7vw, 5.5rem); border-bottom: 1px solid var(--edge); }
+
+  .band-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem 2rem;
+    flex-wrap: wrap;
+    margin-bottom: clamp(1.75rem, 4vw, 2.75rem);
+  }
+
+  .band-head h2 { font-size: clamp(1.6rem, 3.2vw, 2.25rem); max-width: 18ch; }
+  .band-head .band-title { display: flex; flex-direction: column; gap: 0.7rem; }
+  .band-head p { color: var(--dim); max-width: 46ch; font-size: 0.95rem; }
+
+  /* ---------------- stations bento, tilt ---------------- */
+
+  .bento { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0.9rem; perspective: 1400px; }
+
+  .bay {
+    grid-column: span 2;
+    background: var(--surface);
+    border: 1px solid var(--edge);
+    border-radius: var(--radius);
+    padding: 1.15rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    min-height: 12.5rem;
+    position: relative;
+    overflow: hidden;
+    transform-style: preserve-3d;
+    transition: border-color 0.35s var(--ease), transform 0.5s var(--ease);
+    will-change: transform;
+  }
+
+  /* cursor spotlight, driven by two custom properties */
+  .bay::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    background: radial-gradient(16rem 16rem at var(--mx, 50%) var(--my, 50%), rgba(200, 118, 58, 0.16), transparent 70%);
+    transition: opacity 0.4s var(--ease);
+    pointer-events: none;
+  }
+
+  .bay:hover { border-color: var(--edge-hi); }
+  .bay:hover::before { opacity: 1; }
+
+  .bay > * { position: relative; }
+
+  .bay.wide { grid-column: span 3; }
+  .bay.feature { grid-column: span 3; min-height: 15.5rem; background: linear-gradient(155deg, #24211D 0%, var(--surface) 62%); }
+
+  .bay.soon { background: transparent; border-style: dashed; min-height: 9.5rem; }
+  .bay.soon h3, .bay.soon .bay-note { color: var(--dimmer); }
+  .bay.soon:hover::before { opacity: 0; }
+
+  .bay-top { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
+  .bay h3 { font-size: 1.12rem; }
+
+  .bay .rate { font-family: var(--mono); font-size: 1rem; font-weight: 600; color: var(--lamp); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .bay .rate small { font-size: 0.7rem; color: var(--dimmer); font-weight: 400; }
+
+  .soon-tag {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dim);
+    border: 1px solid var(--edge);
+    border-radius: 999px;
+    padding: 0.18rem 0.55rem;
+    white-space: nowrap;
+  }
+
+  .spec { margin-top: auto; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+  .spec li {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--dim);
+    border: 1px solid var(--edge);
+    border-radius: 6px;
+    padding: 0.22rem 0.5rem;
+  }
+
+  .bay.feature .spec li { border-color: rgba(200, 118, 58, 0.28); color: #C7A98C; }
+  .bay-note { font-size: 0.88rem; color: var(--dim); }
+
+  @media (max-width: 60rem) {
+    .bento { grid-template-columns: 1fr; perspective: none; }
+    .bay, .bay.wide, .bay.feature, .bay.soon { grid-column: span 1; min-height: 0; }
+  }
+
+  /* ---------------- games shelf, coverflow ---------------- */
+
+  .shelf-wrap { position: relative; margin-inline: calc(var(--pad) * -1); }
+
+  .shelf {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    padding: 1.5rem var(--pad) 1.75rem;
+    perspective: 1200px;
+    perspective-origin: 50% 45%;
+    scroll-snap-type: x proximity;
+    cursor: grab;
+    scrollbar-width: thin;
+    scrollbar-color: var(--surface-hi) transparent;
+  }
+
+  .shelf.dragging { cursor: grabbing; scroll-snap-type: none; }
+  .shelf::-webkit-scrollbar { height: 5px; }
+  .shelf::-webkit-scrollbar-thumb { background: var(--surface-hi); border-radius: 3px; }
+
+  .game {
+    flex: 0 0 10.5rem;
+    scroll-snap-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    user-select: none;
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+
+  .case {
+    aspect-ratio: 3 / 4;
+    border-radius: 10px;
+    border: 1px solid var(--edge);
+    background: linear-gradient(165deg, var(--surface-hi) 0%, var(--surface) 100%);
+    display: flex;
+    align-items: flex-end;
+    padding: 0.7rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 18px 40px -22px rgba(0, 0, 0, 0.9);
+  }
+
+  .case::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(80% 60% at 50% 0%, rgba(200, 118, 58, 0.18), transparent 70%);
+  }
+
+  /* spine highlight sells the 3D turn */
+  .case::after {
+    content: "";
+    position: absolute;
+    top: 0; bottom: 0; left: 0;
+    width: 5px;
+    background: linear-gradient(to right, rgba(232, 227, 220, 0.16), transparent);
+  }
+
+  .case .players {
+    position: relative;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    color: var(--dim);
+    background: rgba(12, 13, 15, 0.7);
+    border: 1px solid var(--edge);
+    border-radius: 5px;
+    padding: 0.16rem 0.4rem;
+  }
+
+  .game b { font-size: 0.9rem; font-weight: 500; letter-spacing: -0.01em; }
+  .game span { font-family: var(--mono); font-size: 0.7rem; color: var(--dimmer); }
+
+  /* ---------------- rates ---------------- */
+
+  .rates { display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: 1px; background: var(--edge); border: 1px solid var(--edge); border-radius: var(--radius); overflow: hidden; }
+
+  .rate-cell { background: var(--room); padding: 1.35rem 1.25rem; display: flex; flex-direction: column; gap: 0.45rem; }
+  .rate-cell.hot { background: var(--surface); }
+  .rate-cell .amount { font-family: var(--mono); font-size: clamp(1.9rem, 4vw, 2.5rem); font-weight: 600; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
+  .rate-cell.hot .amount { color: var(--lamp); }
+  .rate-cell .when { font-size: 0.88rem; color: var(--dim); }
+
+  /* ---------------- buyout ---------------- */
+
+  .buyout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+    align-items: center;
+    background: linear-gradient(140deg, #23201C 0%, var(--surface) 60%);
+    border: 1px solid rgba(200, 118, 58, 0.22);
+    border-radius: var(--radius);
+    padding: clamp(1.5rem, 4vw, 2.75rem);
+    box-shadow: inset 0 1px 0 rgba(232, 227, 220, 0.06);
+  }
+
+  .buyout-copy { display: flex; flex-direction: column; gap: 1.15rem; align-items: flex-start; }
+  .buyout h2 { font-size: clamp(1.5rem, 3vw, 2.05rem); }
+  .buyout p { color: var(--dim); max-width: 48ch; }
+
+  .buyout-specs { display: flex; flex-direction: column; }
+
+  .buyout-specs div {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 1rem;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid var(--edge);
+    font-size: 0.92rem;
+  }
+
+  .buyout-specs div:first-child { border-top: 1px solid var(--edge); }
+  .buyout-specs dt { color: var(--dim); }
+  .buyout-specs dd { margin: 0; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+  @media (max-width: 60rem) { .buyout { grid-template-columns: 1fr; } }
+
+  /* ---------------- reviews ---------------- */
+
+  .reviews { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1.5rem 2.5rem; }
+
+  .review { display: flex; flex-direction: column; gap: 0.85rem; padding-top: 1.15rem; border-top: 1px solid var(--edge); }
+  .review q { font-size: 0.98rem; line-height: 1.6; quotes: none; }
+  .review footer { display: flex; align-items: baseline; gap: 0.6rem; }
+  .review .who { font-size: 0.88rem; font-weight: 500; }
+  .review .stars { font-family: var(--mono); font-size: 0.75rem; color: var(--lamp); letter-spacing: 0.1em; }
+  .review .src { font-family: var(--mono); font-size: 0.7rem; color: var(--dimmer); margin-left: auto; }
+
+  /* ---------------- find us ---------------- */
+
+  .find { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(1.5rem, 4vw, 3rem); align-items: start; }
+
+  .hours { display: flex; flex-direction: column; }
+
+  .hours div {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 1rem;
+    padding: 0.6rem 0.7rem;
+    border-bottom: 1px solid var(--edge);
+    font-size: 0.92rem;
+    border-radius: 6px;
+  }
+
+  .hours div:first-child { border-top: 1px solid var(--edge); }
+  .hours dt { color: var(--dim); }
+  .hours dd { margin: 0; font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--dim); }
+  .hours div.today { background: var(--surface); }
+  .hours div.today dt, .hours div.today dd { color: var(--paper); }
+  .hours div.today dt::after { content: " · today"; color: var(--lamp); font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em; }
+
+  .where { display: flex; flex-direction: column; gap: 1.25rem; align-items: flex-start; }
+  .where address { font-style: normal; font-size: 1rem; line-height: 1.65; }
+  .where address .land { color: var(--dim); }
+
+  .map {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    border-radius: var(--radius);
+    border: 1px solid var(--edge);
+    background:
+      radial-gradient(60% 60% at 62% 44%, rgba(200, 118, 58, 0.18), transparent 70%),
+      linear-gradient(150deg, #191C1F, #121417);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .map::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--edge) 1px, transparent 1px),
+      linear-gradient(90deg, var(--edge) 1px, transparent 1px);
+    background-size: 32px 32px;
+    transform: perspective(600px) rotateX(52deg) scale(1.6);
+    transform-origin: 50% 100%;
+    opacity: 0.8;
+  }
+
+  .map .pin {
+    position: relative;
+    width: 13px; height: 13px;
+    border-radius: 50%;
+    background: var(--lamp);
+    box-shadow: 0 0 0 6px rgba(200, 118, 58, 0.18), 0 0 0 14px rgba(200, 118, 58, 0.08);
+  }
+
+  .map .maptag {
+    position: absolute;
+    left: 0.9rem; bottom: 0.9rem;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dimmer);
+  }
+
+  @media (max-width: 60rem) { .find { grid-template-columns: 1fr; } }
+
+  /* ---------------- footer ---------------- */
+
+  footer.site { position: relative; z-index: 1; background: var(--room); padding-block: clamp(2.5rem, 5vw, 3.5rem) 7rem; }
+
+  .foot-grid { display: flex; flex-wrap: wrap; gap: 1.5rem 3rem; align-items: flex-start; justify-content: space-between; }
+  .foot-links { display: flex; flex-wrap: wrap; gap: 1.25rem; }
+  .foot-links a { font-size: 0.9rem; color: var(--dim); }
+  .foot-links a:hover { color: var(--paper); }
+
+  .fineprint { font-family: var(--mono); font-size: 0.7rem; line-height: 1.8; color: var(--dimmer); max-width: 56ch; margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid var(--edge); }
+
+  /* ---------------- mobile dock ---------------- */
+
+  .dock {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 50;
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.7rem var(--pad) calc(0.7rem + env(safe-area-inset-bottom));
+    background: rgba(18, 19, 21, 0.78);
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    border-top: 1px solid var(--edge);
+    box-shadow: inset 0 1px 0 rgba(232, 227, 220, 0.08);
+  }
+
+  .dock .from { display: flex; flex-direction: column; line-height: 1.3; }
+  .dock .from span { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dim); }
+  .dock .from b { font-family: var(--mono); font-size: 1.05rem; font-weight: 600; }
+
+  @media (max-width: 60rem) { .dock { display: flex; } }
+
+  /* ---------------- intro ----------------
+     Hidden in markup and only revealed by script, so a page with no JS
+     is never left staring at a veil it cannot dismiss. */
+
+  .veil {
+    position: fixed;
+    inset: 0;
+    z-index: 70;
+    background: var(--room);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.15rem;
+    transition: opacity 0.75s var(--ease), visibility 0.75s;
+  }
+
+  .veil[hidden] { display: none; }
+  .veil.gone { opacity: 0; visibility: hidden; pointer-events: none; }
+
+  .veil-mark { font-size: clamp(2rem, 6vw, 3.4rem); font-weight: 700; letter-spacing: -0.05em; }
+  .veil-mark span { color: var(--lamp); }
+  .veil-line { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--dimmer); }
+
+  .veil-bar { width: 9rem; height: 2px; background: var(--edge); overflow: hidden; }
+  .veil-bar i { display: block; height: 100%; background: var(--lamp); transform: scaleX(0); transform-origin: left; animation: fill 1.5s var(--ease) forwards; }
+
+  @keyframes fill { to { transform: scaleX(1); } }
+
+  /* copy is visible by default; script arms the stagger */
+  .hero-copy.armed > *, .hero-card.armed { opacity: 0; transform: translateY(16px); }
+
+  .hero-copy.armed.go > *, .hero-card.armed.go {
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.75s var(--ease), transform 0.75s var(--ease);
+  }
+
+  .hero-copy.armed.go > *:nth-child(1) { transition-delay: 0.04s; }
+  .hero-copy.armed.go > *:nth-child(2) { transition-delay: 0.12s; }
+  .hero-copy.armed.go > *:nth-child(3) { transition-delay: 0.20s; }
+  .hero-copy.armed.go > *:nth-child(4) { transition-delay: 0.28s; }
+  .hero-copy.armed.go > *:nth-child(5) { transition-delay: 0.36s; }
+  .hero-card.armed.go { transition-delay: 0.30s; }
+
+  /* ---------------- games corridor ---------------- */
+
+  .corridor[hidden] { display: none; }
+  .corridor { position: relative; height: 360vh; }
+
+  .corridor-stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+    perspective: 900px;
+    perspective-origin: 50% 46%;
+  }
+
+  .corridor-stage::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(55% 45% at 50% 42%, rgba(200, 118, 58, 0.14), transparent 68%),
+      radial-gradient(70% 60% at 50% 100%, rgba(92, 134, 180, 0.10), transparent 70%);
+  }
+
+  /* vanishing-point floor lines */
+  .corridor-stage::after {
+    content: "";
+    position: absolute;
+    inset: 42% 0 0 0;
+    background-image: linear-gradient(90deg, var(--edge) 1px, transparent 1px);
+    background-size: 90px 100%;
+    transform: perspective(500px) rotateX(72deg);
+    transform-origin: 50% 0;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .rail { position: absolute; inset: 0; transform-style: preserve-3d; }
+
+  .cover {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 15rem;
+    margin: -11.5rem 0 0 -7.5rem;
+    transform-style: preserve-3d;
+    will-change: transform, opacity;
+  }
+
+  .cover .case { box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.95); }
+
+  .cover-meta { display: flex; align-items: baseline; justify-content: space-between; gap: 0.75rem; padding-top: 0.6rem; }
+  .cover-meta b { font-size: 0.95rem; font-weight: 500; }
+  .cover-meta span { font-family: var(--mono); font-size: 0.7rem; color: var(--dimmer); }
+
+  .hud {
+    position: absolute;
+    z-index: 2;
+    left: 50%;
+    bottom: 7%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 1.15rem;
+    padding: 0.7rem 1.15rem;
+    border-radius: 999px;
+    background: rgba(27, 29, 32, 0.66);
+    backdrop-filter: blur(18px) saturate(150%);
+    -webkit-backdrop-filter: blur(18px) saturate(150%);
+    border: 1px solid var(--edge-hi);
+    box-shadow: inset 0 1px 0 rgba(232, 227, 220, 0.12);
+    white-space: nowrap;
+    max-width: calc(100% - 2 * var(--pad));
+    overflow: hidden;
+  }
+
+  .hud .now { font-size: 0.95rem; font-weight: 500; }
+  .hud .sep { width: 1px; height: 1.1rem; background: var(--edge-hi); }
+  .hud .who { font-family: var(--mono); font-size: 0.72rem; color: var(--dim); }
+  .hud .plat { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--lamp); }
+
+  .corridor-hint {
+    position: absolute;
+    z-index: 2;
+    left: 50%;
+    top: 8%;
+    transform: translateX(-50%);
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--dimmer);
+    transition: opacity 0.5s var(--ease);
+  }
+
+  .corridor-hint.faded { opacity: 0; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+    .game { transform: none !important; }
+    .bay { transform: none !important; }
+    .hero-copy.armed > *, .hero-card.armed { opacity: 1; transform: none; }
+  }
+</style>
+
+<div class="veil" id="veil" hidden>
+  <p class="veil-mark">Lvl<span>Up</span></p>
+  <div class="veil-bar" aria-hidden="true"><i></i></div>
+  <p class="veil-line">Turning the screens on</p>
+</div>
+
+<div class="strip" id="strip">
+  <div class="shell">
+    <span>Mockup — every photo, price, review and address below is placeholder content</span>
+    <button type="button" id="strip-close" aria-label="Dismiss notice">close</button>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="shell">
+    <a class="wordmark" href="#top">Lvl<span>Up</span></a>
+    <div class="nav-links">
+      <a href="#stations">Bays</a>
+      <a href="#games">Games</a>
+      <a href="#rates">Rates</a>
+      <a href="#parties">Parties</a>
+      <a href="#find">Find us</a>
+    </div>
+    <a class="btn btn-primary" href="#book">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.5 8.5 0 0 1-4-1L3 20l1.1-4.8A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5Z"/></svg>
+      Book
+    </a>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="stage" aria-hidden="true">
+    <div class="stage-fallback"></div>
+    <canvas id="stage-canvas"></canvas>
+  </div>
+
+  <div class="shell">
+    <div class="hero-grid">
+
+      <div class="hero-copy" id="hero-copy">
+        <p class="status label"><span class="dot" aria-hidden="true"></span> Open now · closes 11:00 pm</p>
+        <h1>A dark room, five screens, and whatever you feel like playing.</h1>
+        <p class="hero-sub">PlayStation 5 by the hour in Kalyani Nagar. Walk in, take a bay, we load your game before you sit down. From <b>₹120 an hour</b>.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#book">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.5 8.5 0 0 1-4-1L3 20l1.1-4.8A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5Z"/></svg>
+            Book on WhatsApp
+          </a>
+          <a class="btn btn-ghost" href="#rates">See rates</a>
+        </div>
+        <div class="hero-meta">
+          <span><b class="num">4.7</b> · 23 Google reviews</span>
+          <span><b class="num">3 min</b> from Ramwadi metro</span>
+          <span><b class="num">5</b> PS5 bays · <b class="num">10</b> seats</span>
+        </div>
+      </div>
+
+      <div class="hero-card" id="hero-card">
+        <div class="hero-card-inner" id="tilt-card">
+          <p class="label">Tonight</p>
+          <dl class="hero-card-rows">
+            <div><dt>Bays free right now</dt><dd>3 of 5</dd></div>
+            <div><dt>Standard rate</dt><dd>₹120 / hr</dd></div>
+            <div><dt>Off-peak, weekdays</dt><dd class="hot">₹90 / hr</dd></div>
+            <div><dt>Next tournament</dt><dd>Sat, 8 pm</dd></div>
+          </dl>
+          <a class="btn btn-primary" href="#book" style="justify-content:center">Hold a bay</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</header>
+
+<section class="band" id="stations">
+  <div class="shell">
+    <div class="band-head">
+      <div class="band-title">
+        <p class="label">01 — The bays</p>
+        <h2>Five PS5 bays. Pick the one that fits your night.</h2>
+      </div>
+      <p>PlayStation 5 only for now — racing and PC are being built and will open later this year. Every bay is cleaned between sessions, controllers charged, games patched. Rates are per bay, not per person.</p>
+    </div>
+
+    <div class="bento" id="bento">
+
+      <article class="bay feature">
+        <div class="bay-top">
+          <h3>The Recliner</h3>
+          <p class="rate">₹250<small>/hr</small></p>
+        </div>
+        <p class="bay-note">The one people book a week ahead. Two full recliners, a 65-inch OLED at eye level, and the only bay with its own sound bar instead of headsets.</p>
+        <ul class="spec">
+          <li>PS5 Pro</li><li>65" OLED · 120Hz</li><li>2 recliners</li><li>Sound bar</li><li>Private corner</li>
+        </ul>
+      </article>
+
+      <article class="bay wide">
+        <div class="bay-top">
+          <h3>Bay 01 · 02</h3>
+          <p class="rate">₹120<small>/hr</small></p>
+        </div>
+        <p class="bay-note">The everyday pair, side by side. Best for couch co-op and anyone who turned up with one friend.</p>
+        <ul class="spec"><li>PS5</li><li>55" 4K · 120Hz</li><li>2 seats each</li><li>4 controllers</li></ul>
+      </article>
+
+      <article class="bay">
+        <div class="bay-top">
+          <h3>Bay 03</h3>
+          <p class="rate">₹120<small>/hr</small></p>
+        </div>
+        <p class="bay-note">Back corner, furthest from the door. The quiet one.</p>
+        <ul class="spec"><li>PS5</li><li>55" 4K</li><li>2 seats</li></ul>
+      </article>
+
+      <article class="bay">
+        <div class="bay-top">
+          <h3>Bay 05</h3>
+          <p class="rate">₹120<small>/hr</small></p>
+        </div>
+        <p class="bay-note">Nearest the counter, easiest to grab without booking ahead.</p>
+        <ul class="spec"><li>PS5</li><li>55" 4K</li><li>2 seats</li></ul>
+      </article>
+
+      <article class="bay soon">
+        <div class="bay-top">
+          <h3>Racing rig</h3>
+          <span class="soon-tag">Coming soon</span>
+        </div>
+        <p class="bay-note">Wheel, pedals and a bucket seat, bolted to a frame. Being built now.</p>
+      </article>
+
+      <article class="bay soon">
+        <div class="bay-top">
+          <h3>PC bay</h3>
+          <span class="soon-tag">Coming soon</span>
+        </div>
+        <p class="bay-note">240Hz panel and wired peripherals for the Valorant and CS crowd. Later this year.</p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section class="band" id="games">
+  <div class="shell">
+    <div class="band-head">
+      <div class="band-title">
+        <p class="label">02 — On the shelf</p>
+        <h2>Everything below is installed and updated right now.</h2>
+      </div>
+      <p>Scroll to walk the rack. Want something that is not here? Message us before you come and we will have it downloaded.</p>
+    </div>
+  </div>
+
+  <div class="corridor" id="corridor" hidden>
+    <div class="corridor-stage">
+      <p class="corridor-hint" id="corridor-hint">Keep scrolling</p>
+      <div class="rail" id="rail"></div>
+      <div class="hud">
+        <span class="now" id="hud-title">EA Sports FC 26</span>
+        <span class="sep" aria-hidden="true"></span>
+        <span class="who" id="hud-players">1–4 players</span>
+        <span class="sep" aria-hidden="true"></span>
+        <span class="plat">PS5</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="shell" id="shelf-holder">
+    <div class="shelf-wrap">
+      <div class="shelf" id="shelf">
+        <article class="game"><div class="case"><span class="players">1–4</span></div><b>EA Sports FC 26</b><span>PS5</span></article>
+        <article class="game"><div class="case"><span class="players">1–2</span></div><b>Tekken 8</b><span>PS5</span></article>
+        <article class="game"><div class="case"><span class="players">1–2</span></div><b>Mortal Kombat 1</b><span>PS5</span></article>
+        <article class="game"><div class="case"><span class="players">1–2</span></div><b>Street Fighter 6</b><span>PS5</span></article>
+        <article class="game"><div class="case"><span class="players">1–2</span></div><b>Gran Turismo 7</b><span>PS5</span></article>
+        <article class="game"><div class="case"><span class="players">1</span></div><b>Spider-Man 2</b><span>PS5</span></article>
+        <article class="game"><div class="case"><span class="players">1</span></div><b>God of War Ragnarök</b><span>PS5</span></article>
+        <article class="game"><div class="case"><span class="players">1</span></div><b>Elden Ring</b><span>PS5</span></article>
+        <article class="game"><div class="case"><span class="players">1–4</span></div><b>WWE 2K25</b><span>PS5</span></article>
+        <article class="game"><div class="case"><span class="players">1–4</span></div><b>Rocket League</b><span>PS5</span></article>
+        <article class="game"><div class="case"><span class="players">2</span></div><b>It Takes Two</b><span>PS5</span></article>
+        <article class="game"><div class="case"><span class="players">1–2</span></div><b>F1 25</b><span>PS5</span></article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="rates">
+  <div class="shell">
+    <div class="band-head">
+      <div class="band-title">
+        <p class="label">03 — Rates</p>
+        <h2>Priced by the hour, per bay.</h2>
+      </div>
+      <p>Two people on one bay pay one rate. Weekday afternoons are the cheapest hours we sell, and the room is usually empty then.</p>
+    </div>
+
+    <div class="rates">
+      <div class="rate-cell hot">
+        <p class="label">Off-peak</p>
+        <p class="amount">₹90</p>
+        <p class="when">Mon–Fri, 1–5 pm. Any standard bay.</p>
+      </div>
+      <div class="rate-cell">
+        <p class="label">Standard</p>
+        <p class="amount">₹120</p>
+        <p class="when">Mon–Fri, 5 pm onwards.</p>
+      </div>
+      <div class="rate-cell">
+        <p class="label">Weekend</p>
+        <p class="amount">₹150</p>
+        <p class="when">Sat &amp; Sun, all day.</p>
+      </div>
+      <div class="rate-cell">
+        <p class="label">10-hour pass</p>
+        <p class="amount">₹999</p>
+        <p class="when">Works out to ₹100 an hour. Valid 3 months.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="parties">
+  <div class="shell">
+    <div class="buyout">
+      <div class="buyout-copy">
+        <p class="label">04 — The whole room</p>
+        <h2>Take the place for the evening.</h2>
+        <p>Birthdays, farewells, a team that lost a bet. Every bay, every screen, ten seats and the sound system on your playlist. We will run a FC or Tekken bracket if you want one, and clear the counter for your cake.</p>
+        <a class="btn btn-primary" href="#book">Enquire about a party</a>
+      </div>
+      <dl class="buyout-specs">
+        <div><dt>Whole lounge</dt><dd>₹1,200 / hr</dd></div>
+        <div><dt>Minimum booking</dt><dd>2 hours</dd></div>
+        <div><dt>Seats</dt><dd>10</dd></div>
+        <div><dt>Advance to hold</dt><dd>₹1,000</dd></div>
+        <div><dt>Outside cake</dt><dd>Yes</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="shell">
+    <div class="band-head">
+      <div class="band-title">
+        <p class="label">05 — What people say</p>
+        <h2>Reviews, copied straight off Google.</h2>
+      </div>
+      <p>Rated <b class="num">4.7</b> from 23 reviews. The complaints are left in.</p>
+    </div>
+
+    <div class="reviews">
+      <article class="review">
+        <q>Booked the recliner bay for my brother's birthday. Controllers were clean, AC was actually cold, and FC 26 was already installed and updated. Nobody made us wait around.</q>
+        <footer><span class="who">Aditya Rane</span><span class="stars">★★★★★</span><span class="src">Google</span></footer>
+      </article>
+      <article class="review">
+        <q>Came at 2 pm on a Wednesday and had the place almost to myself at the off-peak rate. Two hours of Tekken for ₹180 total is hard to argue with, and the screens are genuinely good ones.</q>
+        <footer><span class="who">Faiz Qureshi</span><span class="stars">★★★★★</span><span class="src">Google</span></footer>
+      </article>
+      <article class="review">
+        <q>Good setup and fair pricing. Only real complaint is parking gets tight after 8 pm. Staff let us extend by half an hour without any fuss, so I will be back.</q>
+        <footer><span class="who">Sneha Kulkarni</span><span class="stars">★★★★☆</span><span class="src">Google</span></footer>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="find">
+  <div class="shell">
+    <div class="band-head">
+      <div class="band-title">
+        <p class="label">06 — Find us</p>
+        <h2>Above the bakery, first floor.</h2>
+      </div>
+    </div>
+
+    <div class="find">
+      <div class="where">
+        <address>
+          Shop 4, First floor, Meridian Plaza<br>
+          Lane 6, Kalyani Nagar, Pune 411006<br>
+          <span class="land">Above Kayani Bakery, opposite the HP pump</span>
+        </address>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#book">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.5 8.5 0 0 1-4-1L3 20l1.1-4.8A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5Z"/></svg>
+            WhatsApp
+          </a>
+          <a class="btn btn-ghost" href="#find">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
+            Directions
+          </a>
+          <a class="btn btn-ghost" href="#find">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h3.5l1.7 4-2.2 1.4a12 12 0 0 0 5.6 5.6L15 12.8l4 1.7V18a2 2 0 0 1-2.2 2A15.5 15.5 0 0 1 3 6.2 2 2 0 0 1 5 4Z"/></svg>
+            <span class="num">+91 98867 41290</span>
+          </a>
+        </div>
+        <div class="map">
+          <span class="pin" aria-hidden="true"></span>
+          <span class="maptag">Map loads on tap</span>
+        </div>
+      </div>
+
+      <dl class="hours" id="hours">
+        <div data-day="1"><dt>Monday</dt><dd>1:00 pm — 11:00 pm</dd></div>
+        <div data-day="2"><dt>Tuesday</dt><dd>1:00 pm — 11:00 pm</dd></div>
+        <div data-day="3"><dt>Wednesday</dt><dd>1:00 pm — 11:00 pm</dd></div>
+        <div data-day="4"><dt>Thursday</dt><dd>1:00 pm — 11:00 pm</dd></div>
+        <div data-day="5"><dt>Friday</dt><dd>1:00 pm — 12:00 am</dd></div>
+        <div data-day="6"><dt>Saturday</dt><dd>11:00 am — 12:00 am</dd></div>
+        <div data-day="0"><dt>Sunday</dt><dd>11:00 am — 11:00 pm</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<footer class="site" id="book">
+  <div class="shell">
+    <div class="foot-grid">
+      <a class="wordmark" href="#top">Lvl<span>Up</span></a>
+      <div class="foot-links">
+        <a href="#stations">Bays</a>
+        <a href="#rates">Pricing</a>
+        <a href="#parties">Parties</a>
+        <a href="#find">Contact</a>
+        <a href="#find">Instagram</a>
+      </div>
+      <a class="btn btn-primary" href="#book">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.5 8.5 0 0 1-4-1L3 20l1.1-4.8A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5Z"/></svg>
+        Book on WhatsApp
+      </a>
+    </div>
+    <p class="fineprint">
+      Design mockup for LvlUp. PlayStation 5 only at launch; racing and PC bays are shown as coming soon. Venue name, address, phone number, rates, reviews and game list are placeholder content and must be replaced before launch. The hero is a live WebGL scene with a painted fallback beneath it — on phones, slow connections and reduced-motion the fallback is all that ever renders.
+    </p>
+  </div>
+</footer>
+
+<div class="dock">
+  <span class="from"><span>From</span><b>₹120/hr</b></span>
+  <a class="btn btn-primary" href="#book">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.5 8.5 0 0 1-4-1L3 20l1.1-4.8A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5Z"/></svg>
+    Book a bay
+  </a>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var coarse = window.matchMedia("(pointer: coarse)").matches;
+  var roomy = !reduced && !coarse && window.innerWidth >= 900;
+
+  /* set by the WebGL stage once it is actually running */
+  var stageApi = null;
+
+  function clamp01(v) { return v < 0 ? 0 : (v > 1 ? 1 : v); }
+  function easeOut(v) { return 1 - Math.pow(1 - v, 3); }
+
+  /* ---------- notice strip ---------- */
+  var strip = document.getElementById("strip");
+  var stripClose = document.getElementById("strip-close");
+  if (strip && stripClose) {
+    stripClose.addEventListener("click", function () { strip.hidden = true; });
+  }
+
+  /* ---------- today's hours ---------- */
+  var todayRow = document.querySelector('#hours div[data-day="' + new Date().getDay() + '"]');
+  if (todayRow) { todayRow.classList.add("today"); }
+
+  /* ---------- bay tilt + cursor spotlight ---------- */
+  (function bays() {
+    if (reduced || coarse) { return; }
+    var cards = document.querySelectorAll("#bento .bay");
+
+    Array.prototype.forEach.call(cards, function (card) {
+      var frame = 0, mx = 50, my = 50, rx = 0, ry = 0;
+
+      function apply() {
+        frame = 0;
+        card.style.setProperty("--mx", mx + "%");
+        card.style.setProperty("--my", my + "%");
+        card.style.transform = "perspective(1400px) rotateX(" + rx.toFixed(2) + "deg) rotateY(" + ry.toFixed(2) + "deg) translateZ(6px)";
+      }
+
+      card.addEventListener("pointermove", function (e) {
+        var r = card.getBoundingClientRect();
+        var px = (e.clientX - r.left) / r.width;
+        var py = (e.clientY - r.top) / r.height;
+        mx = px * 100; my = py * 100;
+        ry = (px - 0.5) * 7;
+        rx = (0.5 - py) * 6;
+        if (!frame) { frame = window.requestAnimationFrame(apply); }
+      });
+
+      card.addEventListener("pointerleave", function () {
+        if (frame) { window.cancelAnimationFrame(frame); frame = 0; }
+        card.style.transform = "";
+      });
+    });
+  }());
+
+  /* ---------- hero card tilt ---------- */
+  (function heroCard() {
+    if (reduced || coarse) { return; }
+    var card = document.getElementById("tilt-card");
+    if (!card) { return; }
+    var frame = 0, rx = 0, ry = 0;
+
+    function apply() {
+      frame = 0;
+      card.style.transform = "rotateX(" + rx.toFixed(2) + "deg) rotateY(" + ry.toFixed(2) + "deg)";
+    }
+
+    window.addEventListener("pointermove", function (e) {
+      ry = (e.clientX / window.innerWidth - 0.5) * 9;
+      rx = (0.5 - e.clientY / window.innerHeight) * 7;
+      if (!frame) { frame = window.requestAnimationFrame(apply); }
+    }, { passive: true });
+  }());
+
+  /* ---------- games shelf: drag to pan + coverflow turn ---------- */
+  (function shelf() {
+    var rack = document.getElementById("shelf");
+    if (!rack) { return; }
+    var games = rack.querySelectorAll(".game");
+    var down = false, startX = 0, startLeft = 0, moved = 0, frame = 0;
+
+    function turn() {
+      frame = 0;
+      if (reduced) { return; }
+      var mid = rack.getBoundingClientRect().left + rack.clientWidth / 2;
+      Array.prototype.forEach.call(games, function (g) {
+        var r = g.getBoundingClientRect();
+        var d = (r.left + r.width / 2 - mid) / (rack.clientWidth / 2);
+        d = Math.max(-1.4, Math.min(1.4, d));
+        var rot = -d * 26;
+        var z = -Math.abs(d) * 90;
+        var s = 1 - Math.abs(d) * 0.07;
+        g.style.transform = "translateZ(" + z.toFixed(1) + "px) rotateY(" + rot.toFixed(2) + "deg) scale(" + s.toFixed(3) + ")";
+        g.style.opacity = (1 - Math.abs(d) * 0.28).toFixed(3);
+      });
+    }
+
+    function schedule() { if (!frame) { frame = window.requestAnimationFrame(turn); } }
+
+    rack.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    schedule();
+
+    rack.addEventListener("pointerdown", function (e) {
+      if (e.pointerType === "touch") { return; }
+      down = true; moved = 0;
+      startX = e.clientX;
+      startLeft = rack.scrollLeft;
+      rack.classList.add("dragging");
+      rack.setPointerCapture(e.pointerId);
+    });
+
+    rack.addEventListener("pointermove", function (e) {
+      if (!down) { return; }
+      var dx = e.clientX - startX;
+      moved = Math.abs(dx);
+      rack.scrollLeft = startLeft - dx;
+    });
+
+    function release(e) {
+      if (!down) { return; }
+      down = false;
+      rack.classList.remove("dragging");
+      if (e.pointerId !== undefined && rack.hasPointerCapture && rack.hasPointerCapture(e.pointerId)) {
+        rack.releasePointerCapture(e.pointerId);
+      }
+    }
+
+    rack.addEventListener("pointerup", release);
+    rack.addEventListener("pointercancel", release);
+    rack.addEventListener("click", function (e) { if (moved > 6) { e.preventDefault(); } }, true);
+  }());
+
+  /* ---------- hero: the room, in WebGL ----------
+     Gated hard. Anything below the bar keeps the painted fallback,
+     which is already on screen and never gets replaced by a blank frame. */
+  (function stage() {
+    var canvas = document.getElementById("stage-canvas");
+    if (!canvas || !window.THREE) { return; }
+    if (reduced) { return; }
+    if (window.innerWidth < 900) { return; }
+    if (navigator.deviceMemory && navigator.deviceMemory < 4) { return; }
+    if (navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4) { return; }
+
+    var conn = navigator.connection;
+    if (conn && (conn.saveData || /^([23]g|slow-2g)$/.test(conn.effectiveType || ""))) { return; }
+
+    var THREE = window.THREE;
+    var renderer;
+
+    try {
+      renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true, powerPreference: "low-power" });
+    } catch (err) {
+      return;
+    }
+
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+
+    var scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x121315, 0.052);
+
+    var camera = new THREE.PerspectiveCamera(46, 1, 0.1, 120);
+    camera.position.set(0, 1.1, 10);
+
+    var root = new THREE.Group();
+    scene.add(root);
+
+    /* soft round glow, drawn once and shared */
+    function glowTexture() {
+      var c = document.createElement("canvas");
+      c.width = c.height = 128;
+      var g = c.getContext("2d");
+      var grad = g.createRadialGradient(64, 64, 0, 64, 64, 64);
+      grad.addColorStop(0, "rgba(255,255,255,0.85)");
+      grad.addColorStop(0.35, "rgba(255,255,255,0.28)");
+      grad.addColorStop(1, "rgba(255,255,255,0)");
+      g.fillStyle = grad;
+      g.fillRect(0, 0, 128, 128);
+      return new THREE.CanvasTexture(c);
+    }
+
+    var glowMap = glowTexture();
+    var screenGeo = new THREE.PlaneGeometry(1, 1);
+    var panels = [];
+
+    var LAMP = 0xC8763A;
+    var COOL = 0x5C86B4;
+    var WARM = 0xA8623C;
+
+    var layout = [
+      { x: -6.4, y: 1.9, z: -9.5, w: 3.0, tint: COOL, lit: 0.42 },
+      { x: -3.5, y: -0.6, z: -6.4, w: 2.4, tint: LAMP, lit: 0.72 },
+      { x: -0.4, y: 2.4, z: -11.5, w: 3.4, tint: WARM, lit: 0.34 },
+      { x: 2.6, y: 0.5, z: -5.2, w: 2.7, tint: LAMP, lit: 0.9 },
+      { x: 5.6, y: 2.2, z: -8.2, w: 3.1, tint: COOL, lit: 0.5 },
+      { x: 7.4, y: -0.9, z: -4.6, w: 2.2, tint: LAMP, lit: 0.66 },
+      { x: -7.6, y: -1.4, z: -6.0, w: 2.3, tint: WARM, lit: 0.4 },
+      { x: 0.9, y: -1.7, z: -9.0, w: 2.6, tint: COOL, lit: 0.3 }
+    ];
+
+    layout.forEach(function (p, i) {
+      var h = p.w * 0.58;
+      var cell = new THREE.Group();
+      cell.position.set(p.x, p.y, p.z);
+      cell.rotation.y = (p.x > 0 ? -1 : 1) * (0.12 + Math.random() * 0.16);
+      cell.rotation.z = (Math.random() - 0.5) * 0.05;
+
+      var bezel = new THREE.Mesh(
+        screenGeo,
+        new THREE.MeshBasicMaterial({ color: 0x2A2E33, transparent: true, opacity: 0.9 })
+      );
+      bezel.scale.set(p.w + 0.14, h + 0.14, 1);
+      bezel.position.z = -0.01;
+      cell.add(bezel);
+
+      var face = new THREE.Mesh(
+        screenGeo,
+        new THREE.MeshBasicMaterial({ color: p.tint, transparent: true, opacity: 0.16 + p.lit * 0.5 })
+      );
+      face.scale.set(p.w, h, 1);
+      cell.add(face);
+
+      var halo = new THREE.Mesh(
+        screenGeo,
+        new THREE.MeshBasicMaterial({
+          map: glowMap,
+          color: p.tint,
+          transparent: true,
+          opacity: 0.22 + p.lit * 0.34,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false
+        })
+      );
+      halo.scale.set(p.w * 3.4, h * 3.8, 1);
+      halo.position.z = -0.06;
+      cell.add(halo);
+
+      root.add(cell);
+      panels.push({ cell: cell, face: face.material, base: 0.16 + p.lit * 0.5, drift: 0.18 + Math.random() * 0.22, phase: i * 1.7 });
+    });
+
+    /* the floor the light falls on */
+    var floorMat = new THREE.MeshBasicMaterial({ color: 0x171A1D, transparent: true, opacity: 0.85 });
+    var floor = new THREE.Mesh(new THREE.PlaneGeometry(80, 80), floorMat);
+    floor.rotation.x = -Math.PI / 2;
+    floor.position.y = -3.4;
+    root.add(floor);
+
+    var grid = new THREE.GridHelper(80, 40, LAMP, 0x2A2E33);
+    grid.position.y = -3.38;
+    grid.material.transparent = true;
+    grid.material.opacity = 0.14;
+    root.add(grid);
+
+    var pointer = { x: 0, y: 0 };
+    var target = { x: 0, y: 0 };
+
+    window.addEventListener("pointermove", function (e) {
+      target.x = (e.clientX / window.innerWidth - 0.5) * 2;
+      target.y = (e.clientY / window.innerHeight - 0.5) * 2;
+    }, { passive: true });
+
+    function resize() {
+      var r = canvas.getBoundingClientRect();
+      var w = Math.max(1, Math.round(r.width));
+      var h = Math.max(1, Math.round(r.height));
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    }
+
+    var raf = 0, onScreen = true;
+    var FLY_FROM = 27, FLY_TO = 10, FLY_MS = 2000;
+    var flyStart = 0;   /* 0 = no intro, camera sits at rest */
+    var scrolled = 0;   /* 0 at the top of the hero, 1 once it is gone */
+
+    function render(now) {
+      var t = now * 0.001;
+
+      pointer.x += (target.x - pointer.x) * 0.045;
+      pointer.y += (target.y - pointer.y) * 0.045;
+
+      var fly = flyStart ? easeOut(clamp01((now - flyStart) / FLY_MS)) : 1;
+      var settle = 1 - fly;
+
+      camera.position.z = FLY_FROM + (FLY_TO - FLY_FROM) * fly + scrolled * 4.5;
+      camera.position.x = pointer.x * 1.5 * fly + Math.sin(t * 0.11) * 0.35;
+      camera.position.y = 1.1 - pointer.y * 0.8 * fly + Math.cos(t * 0.09) * 0.18 + scrolled * 1.6;
+      camera.lookAt(0, 0.2 - scrolled * 0.9, -7);
+      camera.rotation.z = settle * 0.06;   /* after lookAt, which rewrites rotation */
+
+      for (var i = 0; i < panels.length; i++) {
+        var p = panels[i];
+        p.cell.position.y += Math.sin(t * p.drift + p.phase) * 0.0016;
+        p.cell.rotation.y += Math.sin(t * 0.12 + p.phase) * 0.00022;
+        p.face.opacity = p.base + Math.sin(t * 1.1 + p.phase) * 0.05;
+      }
+
+      root.rotation.y = Math.sin(t * 0.06) * 0.035;
+
+      renderer.render(scene, camera);
+      raf = window.requestAnimationFrame(render);
+    }
+
+    function start() {
+      if (raf || !onScreen || document.hidden) { return; }
+      raf = window.requestAnimationFrame(render);
+    }
+
+    function stop() {
+      if (!raf) { return; }
+      window.cancelAnimationFrame(raf);
+      raf = 0;
+    }
+
+    resize();
+    window.addEventListener("resize", resize);
+
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) { stop(); } else { start(); }
+    });
+
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (entries) {
+        onScreen = entries[0].isIntersecting;
+        if (onScreen) { start(); } else { stop(); }
+      }, { threshold: 0 }).observe(canvas);
+    }
+
+    stageApi = {
+      flyIn: function () { flyStart = performance.now(); },
+      setScroll: function (p) { scrolled = p; }
+    };
+
+    /* first frame before the fade, so the scene never blinks in empty */
+    renderer.render(scene, camera);
+    window.requestAnimationFrame(function () {
+      canvas.classList.add("lit");
+      start();
+    });
+  }());
+
+  /* ---------- games corridor: scroll walks the camera past the rack ---------- */
+  (function corridor() {
+    var wrap = document.getElementById("corridor");
+    var rail = document.getElementById("rail");
+    var holder = document.getElementById("shelf-holder");
+    var shelf = document.getElementById("shelf");
+    var hint = document.getElementById("corridor-hint");
+    var hudTitle = document.getElementById("hud-title");
+    var hudPlayers = document.getElementById("hud-players");
+
+    if (!wrap || !rail || !holder || !shelf || !roomy) { return; }
+
+    var source = shelf.querySelectorAll(".game");
+    if (!source.length) { return; }
+
+    Array.prototype.forEach.call(source, function (g) {
+      var title = g.querySelector("b");
+      var players = g.querySelector(".players");
+      var plat = g.querySelector("b + span");
+
+      var cover = document.createElement("article");
+      cover.className = "cover";
+
+      var caseEl = document.createElement("div");
+      caseEl.className = "case";
+      var pill = document.createElement("span");
+      pill.className = "players";
+      pill.textContent = players ? players.textContent : "";
+      caseEl.appendChild(pill);
+
+      var meta = document.createElement("div");
+      meta.className = "cover-meta";
+      var b = document.createElement("b");
+      b.textContent = title ? title.textContent : "";
+      var s = document.createElement("span");
+      s.textContent = plat ? plat.textContent : "PS5";
+      meta.appendChild(b);
+      meta.appendChild(s);
+
+      cover.appendChild(caseEl);
+      cover.appendChild(meta);
+      rail.appendChild(cover);
+    });
+
+    /* the horizontal shelf is the fallback; on a roomy screen the corridor replaces it */
+    wrap.hidden = false;
+    holder.hidden = true;
+
+    var covers = rail.querySelectorAll(".cover");
+    var DEPTH = 560;
+    var travel = (covers.length + 1.6) * DEPTH;
+    var frame = 0;
+    var lastNearest = -1;
+
+    function place() {
+      frame = 0;
+
+      var rect = wrap.getBoundingClientRect();
+      var span = wrap.offsetHeight - window.innerHeight;
+      var p = span > 0 ? clamp01(-rect.top / span) : 0;
+
+      if (hint) { hint.classList.toggle("faded", p > 0.05); }
+
+      var nearest = -1;
+      var nearestGap = Infinity;
+
+      for (var i = 0; i < covers.length; i++) {
+        var el = covers[i];
+        var side = (i % 2) ? 1 : -1;
+        var x = side * 300 + ((i % 3) - 1) * 26;
+        var y = ((i % 4) - 1.5) * 40;
+        var z = -(i * DEPTH) - 520 + p * travel;
+
+        if (z < -2700 || z > 320) {
+          if (el.style.visibility !== "hidden") { el.style.visibility = "hidden"; }
+          continue;
+        }
+        if (el.style.visibility === "hidden") { el.style.visibility = ""; }
+
+        var o = 1;
+        if (z < -1750) { o = clamp01((z + 2700) / 950); }
+        if (z > -140) { o = clamp01(1 - (z + 140) / 420); }
+
+        el.style.transform = "translate3d(" + x + "px," + y + "px," + z.toFixed(1) + "px) rotateY(" + (side * -27) + "deg)";
+        el.style.opacity = o.toFixed(3);
+
+        var gap = Math.abs(z + 880);
+        if (gap < nearestGap) { nearestGap = gap; nearest = i; }
+      }
+
+      if (nearest > -1 && nearest !== lastNearest && hudTitle && hudPlayers) {
+        lastNearest = nearest;
+        var meta = covers[nearest].querySelector(".cover-meta b");
+        var pl = covers[nearest].querySelector(".players");
+        hudTitle.textContent = meta ? meta.textContent : "";
+        hudPlayers.textContent = (pl ? pl.textContent : "") + " players";
+      }
+    }
+
+    function schedule() { if (!frame) { frame = window.requestAnimationFrame(place); } }
+
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    place();
+  }());
+
+  /* ---------- hero parallax on scroll ---------- */
+  (function heroParallax() {
+    if (reduced) { return; }
+    var hero = document.querySelector(".hero");
+    var copy = document.getElementById("hero-copy");
+    if (!hero) { return; }
+    var frame = 0;
+
+    function move() {
+      frame = 0;
+      var h = hero.offsetHeight || 1;
+      var p = clamp01(-hero.getBoundingClientRect().top / h);
+      if (copy) {
+        copy.style.transform = "translate3d(0," + (p * 72).toFixed(1) + "px,0)";
+        copy.style.opacity = (1 - p * 0.85).toFixed(3);
+      }
+      if (stageApi) { stageApi.setScroll(p); }
+    }
+
+    function schedule() { if (!frame) { frame = window.requestAnimationFrame(move); } }
+
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    move();
+  }());
+
+  /* ---------- the intro ----------
+     Only on a roomy pointer device, only from the top of the page, and short.
+     Everything it touches is visible by default, so a failure leaves a readable page. */
+  (function intro() {
+    var veil = document.getElementById("veil");
+    var copy = document.getElementById("hero-copy");
+    var card = document.getElementById("hero-card");
+
+    if (!veil || !roomy || window.scrollY > 40) { return; }
+
+    veil.hidden = false;
+    if (copy) { copy.classList.add("armed"); }
+    if (card) { card.classList.add("armed"); }
+
+    if (stageApi) { stageApi.flyIn(); }
+
+    window.setTimeout(function () {
+      veil.classList.add("gone");
+      if (copy) { copy.classList.add("go"); }
+      if (card) { card.classList.add("go"); }
+    }, 850);
+
+    window.setTimeout(function () { veil.hidden = true; }, 1700);
+  }());
+}());
+</script>

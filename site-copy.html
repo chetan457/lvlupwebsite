@@ -1,0 +1,745 @@
+<title>LvlUp Site Copy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+
+<style>
+  :root {
+    --ground: #F2F5F4; --surface: #FFFFFF; --sunk: #E9EEEC;
+    --ink: #11181A; --ink-soft: #4C595D; --ink-faint: #77868A;
+    --line: #D6E0DE; --line-strong: #B6C5C2; --accent: #0A6E71;
+    --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    --body: "Source Serif 4", Georgia, "Times New Roman", serif;
+    --mono: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0D1214; --surface: #141C1E; --sunk: #101718;
+      --ink: #E8EEEC; --ink-soft: #A0AFB1; --ink-faint: #78888B;
+      --line: #222E31; --line-strong: #334346; --accent: #48C6C7;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #0D1214; --surface: #141C1E; --sunk: #101718;
+    --ink: #E8EEEC; --ink-soft: #A0AFB1; --ink-faint: #78888B;
+    --line: #222E31; --line-strong: #334346; --accent: #48C6C7;
+  }
+
+  * { box-sizing: border-box; }
+
+  body { background: var(--ground); color: var(--ink); font-family: var(--body); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+  .doc { max-width: 60rem; margin: 0 auto; padding: clamp(1.5rem,4vw,3.5rem) clamp(1.1rem,4vw,2.5rem) 5rem; display: flex; flex-direction: column; gap: clamp(2.5rem,5vw,3.5rem); }
+
+  h1, h2, h3 { font-family: var(--display); margin: 0; line-height: 1.14; letter-spacing: -0.02em; text-wrap: balance; }
+  p { margin: 0; }
+
+  .eyebrow { font-family: var(--mono); font-size: 0.68rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-faint); }
+  .num { font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--ink); }
+
+  .masthead { display: flex; flex-direction: column; gap: 1.1rem; padding-bottom: 1.6rem; border-bottom: 2px solid var(--line-strong); }
+  .masthead h1 { font-size: clamp(2.1rem,5vw,3rem); font-weight: 700; letter-spacing: -0.035em; }
+  .masthead p { color: var(--ink-soft); max-width: 56ch; font-size: 1.08rem; }
+
+  .jump { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .jump a { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); text-decoration: none; border: 1px solid var(--line); padding: 0.35rem 0.7rem; border-radius: 999px; }
+  .jump a:hover { border-color: var(--accent); color: var(--accent); }
+  .jump a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  section { display: flex; flex-direction: column; gap: 1.25rem; scroll-margin-top: 1.5rem; }
+  .page-head { display: flex; flex-direction: column; gap: 0.35rem; padding-bottom: 0.9rem; border-bottom: 1px solid var(--line-strong); }
+  .page-head h2 { font-size: clamp(1.6rem,3.4vw,2.1rem); font-weight: 700; }
+  .hint { font-size: 0.8rem; color: var(--ink-faint); font-style: italic; }
+  .page-head .meta { font-size: 0.86rem; color: var(--ink-faint); }
+
+  .blocks { display: flex; flex-direction: column; gap: 0.9rem; }
+
+  .block { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--line-strong); padding: 1rem 1.2rem 1.1rem; display: flex; flex-direction: column; gap: 0.7rem; }
+  .block > header { display: flex; flex-direction: column; gap: 0.3rem; }
+  .block h3 { font-size: 1.15rem; font-weight: 600; }
+
+  .lines { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; }
+  .lines li { font-size: 0.97rem; line-height: 1.55; padding: 0.3rem 0; border-bottom: 1px dotted var(--line); color: var(--ink-soft); }
+  .lines li:last-child { border-bottom: 0; }
+  .lines li:first-child { color: var(--ink); }
+
+  .foot { font-family: var(--mono); font-size: 0.75rem; color: var(--ink-faint); border-top: 1px solid var(--line); padding-top: 1.2rem; line-height: 1.7; }
+</style>
+
+<div class="doc">
+
+  <header class="masthead">
+    <p class="eyebrow">Site copy · every surface · 10 Sep 2026</p>
+    <h1>Every word currently on the site</h1>
+    <p>Pulled from the running pages, not from the source, so this is exactly what a visitor reads. FAQ answers are expanded, and the search snippets, 404, form messages, share card, image descriptions and the structured data Google reads are included. <span class="num">3154</span> words across four pages, plus every surface that is not a page.</p>
+    <nav class="jump" aria-label="Pages">
+      <a href="#home">Home</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+      <a href="#elsewhere">Elsewhere</a>
+    </nav>
+  </header>
+
+  <section id="home">
+    <div class="page-head">
+      <p class="eyebrow">/</p>
+      <h2>Home</h2>
+      <p class="meta"><span class="num">7</span> sections · <span class="num">1086</span> words</p>
+    </div>
+    <div class="blocks">
+        <article class="block">
+          <header><p class="eyebrow">Search result</p><p class="hint">Never seen on the page; the first thing seen in Google and in a shared link</p></header>
+          <ul class="lines">
+          <li>LvlUp — PlayStation 5 by the hour in Kalyani Nagar</li>
+          <li>A PS5 lounge in Kalyani Nagar, Pune. 5 bays, big screens, controllers cleaned between sessions. Book by the hour from ₹90 on a weekday afternoon, or take the whole room for a party.</li>
+          </ul>
+        </article>
+        <article class="block">
+          <header><p class="eyebrow">OPEN NOW · CLOSES 11 PM</p><h3>A dark room, 5 screens and whatever you feel like playing</h3></header>
+          <ul class="lines">
+          <li>PlayStation 5 by the hour in Kalyani Nagar, Pune. Walk in on a weekday afternoon from ₹90 an hour; message us for an evening and we will hold the bay at ₹120.</li>
+          <li>Book on WhatsApp</li>
+          <li>See all rates</li>
+          <li>Rating</li>
+          <li>4.7 from 23 Google reviews</li>
+          <li>Getting here</li>
+          <li>3 min from Ramwadi metro</li>
+          <li>Capacity</li>
+          <li>5 PS5 bays · 10 seats</li>
+          <li>SCROLL TO LOOK AROUND</li>
+          </ul>
+        </article>
+        <article class="block">
+          <header><p class="eyebrow">01 / THE BAYS</p><h3>Pick the bay that suits your night</h3></header>
+          <ul class="lines">
+          <li>PlayStation 5 only for now. The racing rig and the PC bay are being built and will open later this year. Every bay is cleaned between sessions, controllers charged, games patched.</li>
+          <li>The Recliner</li>
+          <li>₹250/hr</li>
+          <li>The bay that goes first at the weekend. 2 full recliners, a 65-inch OLED at eye level and the only bay with its own sound bar instead of headsets.</li>
+          <li>PS5 Pro</li>
+          <li>65&quot; OLED · 120Hz</li>
+          <li>2 recliners</li>
+          <li>Sound bar</li>
+          <li>Private corner</li>
+          <li>Bay 01 · 02</li>
+          <li>₹120/hr</li>
+          <li>2 bays side by side, close enough that you watch the other screen between rounds. Best for couch co-op and anyone who turned up with one friend.</li>
+          <li>PS5</li>
+          <li>55&quot; 4K · 120Hz</li>
+          <li>2 seats each</li>
+          <li>4 controllers</li>
+          <li>Bay 03</li>
+          <li>₹120/hr</li>
+          <li>The back corner, furthest from the door. The counter noise and the lane outside both drop away here, which is why people who come alone to finish a story sit here.</li>
+          <li>PS5</li>
+          <li>55&quot; 4K</li>
+          <li>2 seats</li>
+          <li>Bay 05</li>
+          <li>₹120/hr</li>
+          <li>Nearest the counter, so it is the easiest one to grab without booking. You will hear us on the phone; that is the trade.</li>
+          <li>PS5</li>
+          <li>55&quot; 4K</li>
+          <li>2 seats</li>
+          <li>Not bookable yet</li>
+          <li>LATER THIS YEAR</li>
+          <li>Racing rig</li>
+          <li>Wheel, pedals and a bucket seat, bolted to a frame rather than clamped to a table. You sit low in it, the way you would in the car.</li>
+          <li>Force feedback wheel</li>
+          <li>Bucket seat</li>
+          <li>PC bay</li>
+          <li>240Hz panel and wired peripherals for the Valorant and CS crowd. One seat, upright, no couch.</li>
+          <li>240Hz</li>
+          <li>Wired peripherals</li>
+          <li>Ask for a bay</li>
+          <li>Tell us which bay you want and we will hold it. On a weekend evening that is worth doing.</li>
+          </ul>
+        </article>
+        <article class="block">
+          <header><p class="eyebrow">02 / GAMES</p><h3>12 discs, all of them installed</h3></header>
+          <ul class="lines">
+          <li>FC 26, Tekken 8, Gran Turismo 7, Elden Ring and the rest of the rack, all of them on PlayStation 5. Player counts sit on every case, so you can see what suits a group.</li>
+          <li>1–4</li>
+          <li>EA Sports FC 26</li>
+          <li>01</li>
+          <li>1–2</li>
+          <li>Tekken 8</li>
+          <li>02</li>
+          <li>1–2</li>
+          <li>Mortal Kombat 1</li>
+          <li>03</li>
+          <li>1–2</li>
+          <li>Street Fighter 6</li>
+          <li>04</li>
+          <li>Tekken 8</li>
+          <li>1–2 players</li>
+          <li>PS5</li>
+          <li>EA Sports FC 26 — 1–4 players</li>
+          <li>Tekken 8 — 1–2 players</li>
+          <li>Mortal Kombat 1 — 1–2 players</li>
+          <li>Street Fighter 6 — 1–2 players</li>
+          <li>Gran Turismo 7 — 1–2 players</li>
+          <li>Marvel’s Spider-Man 2 — 1 player</li>
+          <li>God of War Ragnarök — 1 player</li>
+          <li>Elden Ring — 1 player</li>
+          <li>WWE 2K25 — 1–4 players</li>
+          <li>Rocket League — 1–4 players</li>
+          <li>It Takes Two — 2 players</li>
+          <li>F1 25 — 1–2 players</li>
+          <li>Ask for a title</li>
+          <li>Tell us before you come and anything that is not on the rack is downloaded and ready for your slot.</li>
+          </ul>
+        </article>
+        <article class="block">
+          <header><p class="eyebrow">03 / RATES</p><h3>₹90 to ₹250 an hour, per bay</h3></header>
+          <ul class="lines">
+          <li>Bring a friend and the rate does not move; the figure is for the bay. If you mostly come in the evening, a pass takes ₹120 down to ₹100.</li>
+          <li>OFF-PEAK</li>
+          <li>₹90/hr</li>
+          <li>Mon–Fri, 1–5 pm. Any standard bay.</li>
+          <li>STANDARD</li>
+          <li>₹120/hr</li>
+          <li>Mon–Fri, 5 pm onwards.</li>
+          <li>WEEKEND</li>
+          <li>₹150/hr</li>
+          <li>Sat &amp; Sun, all day.</li>
+          <li>10-HOUR PASS</li>
+          <li>₹999</li>
+          <li>Works out to ₹100 an hour. Valid 3 months.</li>
+          <li>EVERY SATURDAY, 8 PM</li>
+          <li>16 players, single elimination, ₹200 to enter. ₹2,000 pot plus 5 free hours to the winner. Message us and we will put your name down.</li>
+          <li>UPI or cash. No card machine yet.</li>
+          <li>See passes and the recliner rate</li>
+          </ul>
+        </article>
+        <article class="block">
+          <header><p class="eyebrow">04 / THE WHOLE ROOM</p><h3>Take the lounge for the evening</h3></header>
+          <ul class="lines">
+          <li>Nobody else walks in while you are in here. Send a date and a headcount and we will hold the slot; the room is yours from the moment the first person arrives.</li>
+          <li>Every bay and every screen</li>
+          <li>The sound system on your playlist</li>
+          <li>An FC or Tekken bracket if you want one</li>
+          <li>The counter cleared for cake</li>
+          <li>Split between 10 people, the 2-hour minimum comes to ₹240 each on a weekday and ₹300 at the weekend.</li>
+          <li>Under-12s are fine with an adult in the room. The 18-rated games stay off while children are in.</li>
+          <li>THE NUMBERS</li>
+          <li>Whole-lounge rate</li>
+          <li>₹1,500/hr on Saturday and Sunday</li>
+          <li>₹1,200/hr</li>
+          <li>Minimum booking</li>
+          <li>2 hours</li>
+          <li>Seats</li>
+          <li>Across 5 bays, all of them yours</li>
+          <li>10</li>
+          <li>Advance to hold the date</li>
+          <li>Back with 24 hours notice</li>
+          <li>₹1,000</li>
+          <li>Ask about a buyout</li>
+          <li>Cancel a bay booking any time. Party bookings need 24 hours notice for the advance to come back.</li>
+          </ul>
+        </article>
+        <article class="block">
+          <header><p class="eyebrow">05 / REVIEWS</p><h3>4.7 from 23, complaints included</h3></header>
+          <ul class="lines">
+          <li>Copied across from Google, unedited. The one about parking stays up, because it is true.</li>
+          <li>Booked the recliner bay for my brother’s birthday. Controllers were clean, the AC was actually cold, and FC 26 was already installed so we could just start playing. Would recommend.</li>
+          <li>Aditya Rane</li>
+          <li>GOOGLE</li>
+          <li>Came on a Wednesday afternoon, place was almost empty and we got the off-peak rate. 2 hours of Tekken for ₹180. Screens are good and none of the controllers drifted.</li>
+          <li>Faiz Qureshi</li>
+          <li>GOOGLE</li>
+          <li>Good setup and fair pricing. Parking after 8 pm was a pain, we went round the lane twice before we found a spot, so take an auto if you can. Staff let us extend by half an hour without any fuss. Losing a star for the parking only.</li>
+          <li>Sneha Kulkarni</li>
+          <li>GOOGLE</li>
+          <li>Book a bay</li>
+          <li>We did not choose which ones show. Pick a time and we will keep a bay for you.</li>
+          </ul>
+        </article>
+        <article class="block">
+          <header><p class="eyebrow">06 / FIND US</p><h3>Up one flight, above the bakery</h3></header>
+          <ul class="lines">
+          <li>Lane 6, 3 minutes on foot from Ramwadi metro. Parking gets tight after 8 pm, so in the evening an auto is easier than driving.</li>
+          <li>THE ADDRESS</li>
+          <li>Shop 4, First floor, Meridian Plaza</li>
+          <li>Lane 6, Kalyani Nagar, Pune 411006</li>
+          <li>Above Kayani Bakery, opposite the HP pump</li>
+          <li>Book a bay</li>
+          <li>Directions</li>
+          <li>+91 98867 41290</li>
+          <li>MAP LOADS ON TAP</li>
+          <li>OPENING HOURS</li>
+          <li>Monday</li>
+          <li>1 pm — 11 pm</li>
+          <li>Tuesday</li>
+          <li>1 pm — 11 pm</li>
+          <li>Wednesday</li>
+          <li>1 pm — 11 pm</li>
+          <li>Thursday</li>
+          <li>TODAY</li>
+          <li>1 pm — 11 pm</li>
+          <li>Friday</li>
+          <li>1 pm — midnight</li>
+          <li>Saturday</li>
+          <li>11 am — midnight</li>
+          <li>Sunday</li>
+          <li>11 am — 11 pm</li>
+          <li>Weekdays open at 1 pm, weekends at 11 am. Friday and Saturday run to midnight.</li>
+          </ul>
+        </article>
+    </div>
+  </section>
+  <section id="pricing">
+    <div class="page-head">
+      <p class="eyebrow">/pricing</p>
+      <h2>Pricing</h2>
+      <p class="meta"><span class="num">9</span> sections · <span class="num">991</span> words</p>
+    </div>
+    <div class="blocks">
+        <article class="block">
+          <header><p class="eyebrow">Search result</p><p class="hint">Never seen on the page; the first thing seen in Google and in a shared link</p></header>
+          <ul class="lines">
+          <li>Rates and passes — LvlUp</li>
+          <li>PS5 by the hour in Kalyani Nagar, Pune, from ₹120 a bay. Cheaper weekday afternoons, 3 prepaid passes and a whole-lounge rate for parties.</li>
+          </ul>
+        </article>
+        <article class="block">
+          <header><p class="eyebrow">RATES</p><h3>What an hour here costs</h3></header>
+          <ul class="lines">
+          <li>One figure per bay, not per head. The rate card is per hour; the passes, the party advance and the bracket entry are totals.</li>
+          <li>CHEAPEST HOUR</li>
+          <li>₹90/hr</li>
+          <li>STANDARD</li>
+          <li>₹120/hr</li>
+          </ul>
+        </article>
+        <article class="block">
+          <header><p class="eyebrow">01 / BY THE HOUR</p><h3>Every standard bay is the same rate</h3></header>
+          <ul class="lines">
+          <li>Weekday evenings and weekends cost more because the room is full. The recliner costs more because it is the one people ask for by name.</li>
+          <li>Placeholder rates, per hour, per bay. A dash in the off-peak column means that bay is not sold at the off-peak rate. Replace from the Pricing tab before launch.</li>
+          <li>BAY	SEATS	WEEKDAY	WEEKEND	OFF-PEAK</li>
+          <li>Bay 01 · 02 · 03 · 05	1–2	₹120	₹150	₹90</li>
+          <li>The Recliner	1–2	₹250	₹300	₹190</li>
+          <li>Whole lounge	up to 10	₹1,200	₹1,500	—</li>
+          <li>Not sold at the off-peak rate</li>
+          <li>Sessions are billed in half-hour steps after the first hour. If a bay is free when your hour ends, staying on is a conversation, not a rebooking.</li>
+          </ul>
+        </article>
+        <article class="block">
+          <header><p class="eyebrow">02 / THE DEAD ZONE</p><h3>Weekday afternoons are cheaper</h3></header>
+          <ul class="lines">
+          <li>Mon–Fri, 1–5 pm. Any standard bay.</li>
+          <li>Between 1 and 5 on a weekday the room is mostly empty. The rent is paid either way, the air conditioning is already running, and an empty chair earns nothing — so those hours are sold for less rather than sold to nobody.</li>
+          <li>It is the same PS5, the same screens and the same controllers as an 8 pm Saturday. The only difference is who else is in the room. Students and anyone on a rotating shift more or less live here.</li>
+          <li>STANDARD BAY</li>
+          <li>₹90</li>
+          <li>₹120</li>
+          <li>per hour, Monday to Friday, 1–5 pm</li>
+          <li>2 hours on a bay comes to ₹180.</li>
+          </ul>
+        </article>
+        <article class="block">
+          <header><p class="eyebrow">03 / PASSES</p><h3>Pay ahead, pay less</h3></header>
+          <ul class="lines">
+          <li>3 prepaid blocks. Each one is a lower hourly rate bought in advance — there is no membership, no card and nothing to renew.</li>
+          <li>10-hour pass</li>
+          <li>10 hours on any standard PS5 bay</li>
+          <li>Valid 3 months from the day you buy it.</li>
+          <li>₹999</li>
+          <li>₹100/hr instead of ₹120</li>
+          <li>Weekend pass</li>
+          <li>5 weekend hours</li>
+          <li>Valid 2 months from the day you buy it.</li>
+          <li>₹649</li>
+          <li>₹130/hr instead of ₹150</li>
+          <li>Monthly regular</li>
+          <li>25 hours, any time</li>
+          <li>Valid 1 month from the day you buy it.</li>
+          <li>₹2,199</li>
+          <li>₹88/hr — the cheapest hour we sell</li>
+          <li>The 10-hour pass costs less than 9 standard hours bought one at a time, so it is ahead before you have finished it. Each row says what its hours cover. Passes are per person and hours come off at the counter; unused hours expire on the date printed, and we will remind you on WhatsApp a week before.</li>
+          </ul>
+        </article>
+        <article class="block">
+          <header><p class="eyebrow">04 / THE WHOLE ROOM</p><h3>Take the lounge for the evening</h3></header>
+          <ul class="lines">
+          <li>Nobody else walks in while you are in here. Send a date and a headcount and we will hold the slot; the room is yours from the moment the first person arrives.</li>
+          <li>Every bay and every screen</li>
+          <li>The sound system on your playlist</li>
+          <li>An FC or Tekken bracket if you want one</li>
+          <li>The counter cleared for cake</li>
+          <li>Split between 10 people, the 2-hour minimum comes to ₹240 each on a weekday and ₹300 at the weekend.</li>
+          <li>Under-12s are fine with an adult in the room. The 18-rated games stay off while children are in.</li>
+          <li>THE NUMBERS</li>
+          <li>Whole-lounge rate</li>
+          <li>₹1,500/hr on Saturday and Sunday</li>
+          <li>₹1,200/hr</li>
+          <li>Minimum booking</li>
+          <li>2 hours</li>
+          <li>Seats</li>
+          <li>Across 5 bays, all of them yours</li>
+          <li>10</li>
+          <li>Advance to hold the date</li>
+          <li>Back with 24 hours notice</li>
+          <li>₹1,000</li>
+          <li>Ask about a buyout</li>
+          </ul>
+        </article>
+        <article class="block">
+          <header><p class="eyebrow">05 / THE BRACKET</p><h3>Saturday night FC bracket</h3></header>
+          <ul class="lines">
+          <li>Sign up at the counter or on WhatsApp. Entries close when the 16th name goes on the sheet.</li>
+          <li>FORMAT</li>
+          <li>16 players, single elimination</li>
+          <li>WHEN</li>
+          <li>Every Saturday, 8 pm</li>
+          <li>ENTRY</li>
+          <li>₹200</li>
+          <li>PRIZE</li>
+          <li>₹2,000 pot plus 5 free hours</li>
+          <li>Entry covers your bracket runs only. Casual hours before or after the bracket bill at the weekend rate.</li>
+          <li>Put my name down</li>
+          </ul>
+        </article>
+        <article class="block">
+          <header><p class="eyebrow">06 / THE FINE PRINT</p><h3>What the hour covers</h3></header>
+          <ul class="lines">
+          <li>Nothing below is a surprise at the counter. If it is not listed as costing extra, the hour already covers it.</li>
+          <li>Included in the hour</li>
+          <li>Controllers, cleaned and charged between sessions</li>
+          <li>Air conditioning and water, both on the house</li>
+          <li>Phone chargers, kept behind the counter</li>
+          <li>Your game, installed and patched before you sit down</li>
+          <li>Costs extra</li>
+          <li>Snacks and cold drinks, sold at the counter</li>
+          <li>Headsets, rented at ₹20 a session</li>
+          </ul>
+        </article>
+        <article class="block">
+          <header><p class="eyebrow">07 / PAYING</p><h3>How to pay, how to cancel</h3></header>
+          <ul class="lines">
+          <li>Only a pass or a party advance is taken up front. A bay booking costs nothing to walk away from.</li>
+          <li>Payment</li>
+          <li>UPI or cash. No card machine yet.</li>
+          <li>Cancellation</li>
+          <li>Cancel a bay booking any time. Party bookings need 24 hours notice for the advance to come back.</li>
+          <li>Book a bay on WhatsApp</li>
+          <li>+91 98867 41290</li>
+          </ul>
+        </article>
+        <article class="block">
+          <header><p class="eyebrow">08 / QUESTIONS</p><h3>Asked at the counter most days</h3></header>
+          <ul class="lines">
+          <li>Do I need to book ahead?</li>
+          <li>Not on a weekday afternoon — walk in and a bay is usually free. Evenings and weekends fill up, so send a WhatsApp before you leave home and we will keep a bay aside.</li>
+          <li>Is the rate per person or per bay?</li>
+          <li>Per bay, per hour — the figure covers whoever is on that couch.</li>
+          <li>What can I play?</li>
+          <li>PlayStation 5 only for now. Everything on the rack is installed and patched. Ask for a title we do not stock and we will download it ahead of your slot.</li>
+          <li>Is there an age limit?</li>
+          <li>No upper limit. Under-12s are welcome with an adult along. We will not put on an 18-rated game for a child, whatever the group says.</li>
+          <li>Can I book the whole place for a birthday?</li>
+          <li>Yes. Every bay, 10 seats and the sound system, on a 2-hour minimum. Message us with the date and we will check it is free.</li>
+          <li>How do I pay?</li>
+          <li>UPI or cash at the counter. Party bookings take an advance to hold the date.</li>
+          <li>Still unsure, ask us. We answer while the counter is open.</li>
+          <li>Book a bay on WhatsApp</li>
+          </ul>
+        </article>
+    </div>
+  </section>
+  <section id="about">
+    <div class="page-head">
+      <p class="eyebrow">/about</p>
+      <h2>About</h2>
+      <p class="meta"><span class="num">5</span> sections · <span class="num">714</span> words</p>
+    </div>
+    <div class="blocks">
+        <article class="block">
+          <header><p class="eyebrow">Search result</p><p class="hint">Never seen on the page; the first thing seen in Google and in a shared link</p></header>
+          <ul class="lines">
+          <li>About the lounge — LvlUp</li>
+          <li>Who runs the PS5 room above the bakery in Kalyani Nagar, what is actually in it — consoles, panel sizes, seating, controllers, line speed — and the 4 house rules worth reading before you turn up.</li>
+          </ul>
+        </article>
+        <article class="block">
+          <header><p class="eyebrow">01 / THE STORY</p><h3>Why there is a PS5 room above the bakery</h3></header>
+          <ul class="lines">
+          <li>I did not plan to run a gaming lounge. I planned to stop hosting one in my flat. For about 4 years my living room in Kalyani Nagar was where 6 people turned up with 2 controllers, and someone was always on the floor at an angle where the goalkeeper was a smudge.</li>
+          <li>The nearest place that rented screens by the hour had PCs, a queue and nobody who could tell you whether the game you wanted was installed. So I took the first-floor shop I was already walking past every week — Above Kayani Bakery, opposite the HP pump — knocked out one wall, and opened with 3 bays, a whiteboard for bookings and no website at all.</li>
+          <li>2 years on there are 5 bays and 10 seats. Almost everything that changed came from someone complaining at the counter. The folding chairs were miserable after an hour, so the recliners went in. Headsets are no fun when you came with a friend, so the corner bay got a sound bar. A fighting-game regular sat me down and showed me the difference on his own console, so the recliner and the paired bays got 120Hz panels.</li>
+          <li>I still take most of the bookings myself in the evenings. That is why the number on this site opens a WhatsApp chat with a person rather than a form that emails someone on Monday.</li>
+          <li>THE ROOM, IN FIGURES</li>
+          <li>Bays</li>
+          <li>5</li>
+          <li>Seats</li>
+          <li>10</li>
+          <li>From</li>
+          <li>₹90/hr</li>
+          <li>Google</li>
+          <li>4.7 · 23</li>
+          <li>Open 7 days. Weekdays from 1 pm, weekends from 11 am, and late every night.</li>
+          <li>3 min from Ramwadi metro</li>
+          </ul>
+        </article>
+        <article class="block">
+          <header><p class="eyebrow">02 / THE SETUP</p><h3>The kit list, before you ask</h3></header>
+          <ul class="lines">
+          <li>The questions people actually message about, answered once. If a spec is not here, it is because I do not have it yet.</li>
+          <li>CONSOLES</li>
+          <li>5 PlayStation 5s, one per bay, all on the shop’s own PSN account so nothing asks you to sign in. The one in The Recliner is a Pro.</li>
+          <li>PANELS</li>
+          <li>65&quot; OLED · 120Hz</li>
+          <li>55&quot; 4K · 120Hz</li>
+          <li>55&quot; 4K</li>
+          <li>SEATING</li>
+          <li>10 seats across 5 bays, and the rate is per bay — a second person on the same screen costs nothing. 2 of those seats are the full recliners in The Recliner.</li>
+          <li>CONTROLLERS</li>
+          <li>Official DualSense pads only, never third-party clones. 4 at the paired bays, 2 everywhere else, all charged between sessions and wiped down at close.</li>
+          <li>SOUND</li>
+          <li>A sound bar in The Recliner. Wired headsets for the other bays, ₹20 a session at the counter, so the match next to you stays out of yours.</li>
+          <li>INTERNET</li>
+          <li>200 Mbps fibre, and every console is on cable rather than wi-fi. A day-one patch downloading on one bay does not slow the rest of the room.</li>
+          <li>POWER</li>
+          <li>The whole floor sits behind an inverter. A cut on the lane does not end your session or corrupt a save.</li>
+          <li>BEING BUILT</li>
+          <li>Racing rig and PC bay — announced, not bookable, and not on the rate card until they work.</li>
+          </ul>
+        </article>
+        <article class="block">
+          <header><p class="eyebrow">03 / HOUSE RULES</p><h3>Worth knowing before you climb the stairs</h3></header>
+          <ul class="lines">
+          <li>There are 4 of them and they have not changed in 2 years. Nobody likes hearing a rule for the first time at the counter, so here they are in advance.</li>
+          <li>Book on WhatsApp</li>
+          <li>See the rates</li>
+          <li>01</li>
+          <li>Shoes off on the recliner platform. Everywhere else they stay on.</li>
+          <li>02</li>
+          <li>Food comes from the counter, except a cake for a party booking. Wherever it came from, we ask you to keep it off the seats.</li>
+          <li>03</li>
+          <li>Break a controller and we charge what a new one costs us, nothing on top. It has happened twice in 2 years.</li>
+          <li>04</li>
+          <li>Cancel a party booking 24 hours ahead and the advance comes back. Do not turn up and we keep it.</li>
+          </ul>
+        </article>
+        <article class="block">
+          <header><p class="eyebrow">04 / THE ROOM</p><h3>What it looks like on a Tuesday</h3></header>
+          <ul class="lines">
+          <li>Low light, big screens, seats you can sink into. No stage lighting, no crowd shot with everyone cheering at once.</li>
+          <li>These are stand-in photographs. Every frame above is a stock image cropped to the slot one of my own shots will fill, and all of them get replaced before launch.</li>
+          </ul>
+        </article>
+        <article class="block">
+          <header></header>
+          <ul class="lines">
+          <li>That is the room. Message me and I will hold a bay.</li>
+          <li>Book on WhatsApp</li>
+          </ul>
+        </article>
+    </div>
+  </section>
+  <section id="contact">
+    <div class="page-head">
+      <p class="eyebrow">/contact</p>
+      <h2>Contact</h2>
+      <p class="meta"><span class="num">2</span> sections · <span class="num">363</span> words</p>
+    </div>
+    <div class="blocks">
+        <article class="block">
+          <header><p class="eyebrow">Search result</p><p class="hint">Never seen on the page; the first thing seen in Google and in a shared link</p></header>
+          <ul class="lines">
+          <li>Contact and booking — LvlUp</li>
+          <li>Book a PS5 bay at LvlUp, Kalyani Nagar, Pune. Message us on WhatsApp for the quickest reply, or send the date, time and number of players and we will confirm the slot.</li>
+          </ul>
+        </article>
+        <article class="block">
+          <header><p class="eyebrow">BOOKINGS</p><h3>Hold a bay before you come</h3></header>
+          <ul class="lines">
+          <li>Walk-ins get whatever is free, which on a Saturday evening is often nothing. An hour starts at ₹90 on a weekday afternoon, and ₹120 after 5 pm. Taking the whole room starts at ₹1,200 an hour, with a 2-hour minimum.</li>
+          <li>REPLY TIME</li>
+          <li>On WhatsApp, usually within the hour while we are open.</li>
+          <li>PAYMENT</li>
+          <li>UPI or cash. No card machine yet.</li>
+          <li>CHANGED PLANS</li>
+          <li>Cancel a bay booking any time. Party bookings need 24 hours notice for the advance to come back.</li>
+          <li>QUICKEST REPLY</li>
+          <li>Book on WhatsApp</li>
+          <li>Call +91 98867 41290</li>
+          <li>A message gets answered while someone is at the counter. The form goes to the same people and books the same bays; it only waits for whoever next checks the laptop. If you are not in a hurry, it is the easier one to send.</li>
+          <li>Company</li>
+          <li>Name</li>
+          <li>Mobile</li>
+          <li>We reply here on WhatsApp.</li>
+          <li>Date</li>
+          <li>Start time</li>
+          <li>Bay</li>
+          <li>OPTIONAL</li>
+          <li>Leave it on whichever is free and we will give you the best bay open at that time.</li>
+          <li>Whichever is free</li>
+          <li>The Recliner — ₹250/hr</li>
+          <li>Bay 01 · 02 — ₹120/hr</li>
+          <li>Bay 03 — ₹120/hr</li>
+          <li>Bay 05 — ₹120/hr</li>
+          <li>Players</li>
+          <li>Up to 10 in the room.</li>
+          <li>Hours</li>
+          <li>1 hour</li>
+          <li>2 hours</li>
+          <li>3 hours</li>
+          <li>4 hours</li>
+          <li>5 hours</li>
+          <li>6 hours</li>
+          <li>Anything else</li>
+          <li>OPTIONAL</li>
+          <li>A birthday, a game you want installed, someone arriving late.</li>
+          <li>Send booking request</li>
+          <li>No payment now. Nothing is held until we reply.</li>
+          </ul>
+        </article>
+        <article class="block">
+          <header><p class="eyebrow">06 / FIND US</p><h3>Up one flight, above the bakery</h3></header>
+          <ul class="lines">
+          <li>Lane 6, 3 minutes on foot from Ramwadi metro. Parking gets tight after 8 pm, so in the evening an auto is easier than driving.</li>
+          <li>THE ADDRESS</li>
+          <li>Shop 4, First floor, Meridian Plaza</li>
+          <li>Lane 6, Kalyani Nagar, Pune 411006</li>
+          <li>Above Kayani Bakery, opposite the HP pump</li>
+          <li>Book a bay</li>
+          <li>Directions</li>
+          <li>+91 98867 41290</li>
+          <li>MAP LOADS ON TAP</li>
+          <li>OPENING HOURS</li>
+          <li>Monday</li>
+          <li>1 pm — 11 pm</li>
+          <li>Tuesday</li>
+          <li>1 pm — 11 pm</li>
+          <li>Wednesday</li>
+          <li>1 pm — 11 pm</li>
+          <li>Thursday</li>
+          <li>TODAY</li>
+          <li>1 pm — 11 pm</li>
+          <li>Friday</li>
+          <li>1 pm — midnight</li>
+          <li>Saturday</li>
+          <li>11 am — midnight</li>
+          <li>Sunday</li>
+          <li>11 am — 11 pm</li>
+          <li>Weekdays open at 1 pm, weekends at 11 am. Friday and Saturday run to midnight.</li>
+          </ul>
+        </article>
+    </div>
+  </section>
+
+  <section id="elsewhere">
+    <div class="page-head">
+      <p class="eyebrow">Not on a page</p>
+      <h2>Everything else that speaks</h2>
+      <p class="meta">Surfaces a visitor still reads, none of which appear in the four pages above</p>
+    </div>
+    <div class="blocks">
+        <article class="block">
+          <header><p class="eyebrow">404 page</p><p class="hint">Reached from a dead link or a mistyped address</p></header>
+          <ul class="lines">
+          <li>404</li>
+          <li>PAGE NOT FOUND</li>
+          <li>This page isn’t here any more.</li>
+          <li>Either the link is old or something got mistyped. Nothing is broken at our end — the bays are open and the rates are where they always were.</li>
+          <li>See the bays</li>
+          <li>Rate card, from</li>
+          <li>₹90</li>
+          <li>/hr</li>
+          <li>Shop 4, First floor, Meridian Plaza, Lane 6, Kalyani Nagar. Above Kayani Bakery, opposite the HP pump.</li>
+          <li>+91 98867 41290</li>
+          <li>WhatsApp us instead</li>
+          </ul>
+        </article>
+        <article class="block">
+          <header><p class="eyebrow">Booking form messages</p><p class="hint">Only seen after submitting; validation and confirmation</p></header>
+          <ul class="lines">
+          <li>Got it. We will confirm on WhatsApp, usually within the hour we are open.</li>
+          <li>Tell us what to call you — at least 2 characters.</li>
+          <li>That is not a 10-digit Indian mobile. Check it and send again.</li>
+          <li>Pick a date.</li>
+          <li>That date has passed. Pick today or later.</li>
+          <li>Pick a start time.</li>
+          <li>Choose one of the bays listed.</li>
+          <li>Nothing sent yet — the marked fields need another look.</li>
+          </ul>
+        </article>
+        <article class="block">
+          <header><p class="eyebrow">Share card</p><p class="hint">The image that renders when the link is forwarded on WhatsApp</p></header>
+          <ul class="lines">
+          <li>LvlUp</li>
+          <li>PlayStation 5 by the hour</li>
+          <li>Kalyani Nagar · Pune</li>
+          <li>from ₹90/hr</li>
+          <li>5 bays · 10 seats</li>
+          </ul>
+        </article>
+        <article class="block">
+          <header><p class="eyebrow">Image descriptions</p><p class="hint">Read aloud by screen readers, and shown if an image fails to load</p></header>
+          <ul class="lines">
+          <li>A darkened lounge with a large screen lit up by a game</li>
+          <li>A controller lit from one side in an otherwise dark room</li>
+          <li>Two people holding controllers, playing a football game together</li>
+          <li>A wireless controller resting on a dark reflective surface</li>
+          <li>A PlayStation 5 console standing beside its controller</li>
+          <li>A wide curved screen and seat, the shape the racing rig will take</li>
+          <li>A desk with a widescreen monitor and mechanical keyboard</li>
+          <li>A group of friends playing together at adjacent stations</li>
+          <li>Arcade cabinets lit up in a darkened room</li>
+          <li>A player leaning into a match, lit only by the screen</li>
+          </ul>
+        </article>
+        <article class="block">
+          <header><p class="eyebrow">Structured data</p><p class="hint">Not on any page. This is what Google is told, and what it can show in a search result</p></header>
+          <ul class="lines">
+          <li>Payment accepted — UPI, Cash</li>
+          <li>Offer: PS5 bay, per hour, ₹90 — Per bay, not per person. Lowest rate on a weekday afternoon.</li>
+          <li>Offer: 10-hour pass, ₹999 — 10 hours on any standard PS5 bay</li>
+          <li>Offer: Weekend pass, ₹649 — 5 weekend hours</li>
+          <li>Offer: Monthly regular, ₹2199 — 25 hours, any time</li>
+          <li>Offer: Whole-lounge buyout, per hour, ₹1200 — Every bay and 10 seats, 2-hour minimum</li>
+          <li>Event: Saturday night FC bracket — 16 players, single elimination. ₹2,000 pot plus 5 free hours.</li>
+          </ul>
+        </article>
+        <article class="block">
+          <header><p class="eyebrow">Header nav</p></header>
+          <ul class="lines">
+          <li>Bays · Games · Rates · Parties · About · Contact</li>
+          </ul>
+        </article>
+        <article class="block">
+          <header><p class="eyebrow">Footer</p></header>
+          <ul class="lines">
+          <li>Lvl</li>
+          <li>Up</li>
+          <li>5 bays, 10 seats, PlayStation 5 by the hour. Message us and we will hold one.</li>
+          <li>Book a bay</li>
+          <li>PAGES</li>
+          <li>Bays</li>
+          <li>Games</li>
+          <li>Rates</li>
+          <li>Parties</li>
+          <li>About</li>
+          <li>Contact</li>
+          <li>FIND US</li>
+          <li>Shop 4, First floor, Meridian Plaza</li>
+          <li>Lane 6, Kalyani Nagar, Pune 411006</li>
+          <li>Above Kayani Bakery, opposite the HP pump</li>
+          <li>+91 98867 41290</li>
+          <li>@lvlup.lounge on Instagram — pictures of the actual room</li>
+          <li>Placeholder site. The photos, rates, reviews and address are stand-ins.</li>
+          <li>© 2026 LvlUp Gaming Lounge</li>
+          </ul>
+        </article>
+    </div>
+  </section>
+
+  <p class="foot">
+    Extracted from http://localhost:3100 after the three-round copy pass. Venue name, address, phone, rates, hours and all three reviews are still placeholder content.
+  </p>
+
+</div>

@@ -1,0 +1,1048 @@
+<title>LvlUp Build Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+
+<style>
+  :root {
+    --ground: #F2F5F4;
+    --surface: #FFFFFF;
+    --surface-sunk: #E9EEEC;
+    --ink: #11181A;
+    --ink-soft: #4C595D;
+    --ink-faint: #77868A;
+    --line: #D6E0DE;
+    --line-strong: #B6C5C2;
+    --accent: #0A6E71;
+    --accent-soft: #DCEDEC;
+    --signal: #9C560B;
+    --signal-soft: #F6E9D8;
+    --pass: #1F6B45;
+    --pass-soft: #DEEDE4;
+    --fail: #9A2C2C;
+    --fail-soft: #F5E2E0;
+
+    --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    --body: "Source Serif 4", Georgia, "Times New Roman", serif;
+    --mono: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+
+    --step-0: 1rem;
+    --step-1: 1.15rem;
+    --step-2: 1.45rem;
+    --step-3: 1.95rem;
+    --step-4: 2.9rem;
+    --step-5: 4rem;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0D1214;
+      --surface: #141C1E;
+      --surface-sunk: #101718;
+      --ink: #E8EEEC;
+      --ink-soft: #A0AFB1;
+      --ink-faint: #78888B;
+      --line: #222E31;
+      --line-strong: #334346;
+      --accent: #48C6C7;
+      --accent-soft: #10302F;
+      --signal: #E0A44E;
+      --signal-soft: #2E2415;
+      --pass: #6ECB9B;
+      --pass-soft: #12281D;
+      --fail: #E4867F;
+      --fail-soft: #2B1616;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #0D1214;
+    --surface: #141C1E;
+    --surface-sunk: #101718;
+    --ink: #E8EEEC;
+    --ink-soft: #A0AFB1;
+    --ink-faint: #78888B;
+    --line: #222E31;
+    --line-strong: #334346;
+    --accent: #48C6C7;
+    --accent-soft: #10302F;
+    --signal: #E0A44E;
+    --signal-soft: #2E2415;
+    --pass: #6ECB9B;
+    --pass-soft: #12281D;
+    --fail: #E4867F;
+    --fail-soft: #2B1616;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: var(--step-0);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .doc {
+    max-width: 68rem;
+    margin: 0 auto;
+    padding: clamp(1.5rem, 4vw, 3.5rem) clamp(1.1rem, 4vw, 2.5rem) 5rem;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(2.75rem, 5vw, 4.25rem);
+  }
+
+  .prose { max-width: 64ch; display: flex; flex-direction: column; gap: 0.9rem; }
+
+  h1, h2, h3, h4 {
+    font-family: var(--display);
+    text-wrap: balance;
+    margin: 0;
+    line-height: 1.12;
+    letter-spacing: -0.018em;
+  }
+
+  p { margin: 0; }
+  a { color: var(--accent); }
+  code { font-family: var(--mono); font-size: 0.88em; }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  /* ---------- masthead ---------- */
+
+  .masthead {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 2px solid var(--line-strong);
+  }
+
+  .masthead h1 { font-size: var(--step-5); font-weight: 700; letter-spacing: -0.035em; }
+  .masthead h1 .lv { color: var(--accent); }
+
+  .standfirst {
+    font-size: var(--step-2);
+    line-height: 1.45;
+    color: var(--ink-soft);
+    max-width: 44ch;
+  }
+
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+
+  .fact { background: var(--surface); padding: 0.85rem 1rem; display: flex; flex-direction: column; gap: 0.25rem; }
+
+  .fact dt {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .fact dd { margin: 0; font-family: var(--display); font-weight: 600; font-size: var(--step-1); }
+
+  /* ---------- sections ---------- */
+
+  section { display: flex; flex-direction: column; gap: 1.5rem; }
+  .sec-head { display: flex; flex-direction: column; gap: 0.45rem; }
+  .sec-head h2 { font-size: var(--step-3); font-weight: 700; }
+
+  /* ---------- decision list ---------- */
+
+  .decisions { display: flex; flex-direction: column; gap: 0; border-top: 1px solid var(--line); }
+
+  .decision {
+    display: grid;
+    grid-template-columns: minmax(0, 14rem) minmax(0, 1fr);
+    gap: 0.4rem 2rem;
+    padding: 1.15rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .decision > dt { font-family: var(--display); font-weight: 600; font-size: var(--step-1); }
+  .decision > dd { margin: 0; display: flex; flex-direction: column; gap: 0.45rem; }
+
+  .picked { font-family: var(--mono); font-size: 0.9rem; font-weight: 500; color: var(--accent); }
+  .why { color: var(--ink-soft); }
+  .instead { font-size: 0.86rem; color: var(--ink-faint); }
+  .instead b { font-weight: 600; color: var(--ink-soft); }
+
+  /* ---------- palette ---------- */
+
+  .swatches { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); gap: 0.9rem; }
+
+  .swatch { display: flex; flex-direction: column; gap: 0.45rem; }
+
+  .chip { height: 4.5rem; border: 1px solid var(--line-strong); }
+
+  .swatch b { font-family: var(--display); font-size: 0.95rem; font-weight: 600; }
+  .swatch span { font-family: var(--mono); font-size: 0.74rem; color: var(--ink-faint); }
+  .swatch em { font-style: normal; font-size: 0.86rem; color: var(--ink-soft); line-height: 1.4; }
+
+  /* ---------- sitemap ---------- */
+
+  .pages { display: grid; grid-template-columns: repeat(auto-fit, minmax(15.5rem, 1fr)); gap: 1.25rem; align-items: start; }
+
+  .page {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    padding: 1.15rem 1.25rem 1.35rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .page-head { display: flex; align-items: baseline; justify-content: space-between; gap: 0.75rem; }
+  .page-head h3 { font-size: var(--step-2); font-weight: 600; }
+  .route { font-family: var(--mono); font-size: 0.78rem; color: var(--ink-faint); }
+
+  .page ol { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 0.55rem; counter-reset: block; }
+
+  .page ol li {
+    display: grid;
+    grid-template-columns: 1.5rem minmax(0, 1fr);
+    gap: 0.55rem;
+    font-size: 0.94rem;
+    line-height: 1.45;
+    counter-increment: block;
+  }
+
+  .page ol li::before {
+    content: counter(block, decimal-leading-zero);
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--ink-faint);
+    padding-top: 0.28em;
+  }
+
+  .page ol li b { font-family: var(--display); font-weight: 600; font-size: 0.95rem; }
+  .page ol li span { color: var(--ink-soft); }
+
+  .cta-note {
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.04em;
+    color: var(--accent);
+    border-top: 1px dashed var(--line-strong);
+    padding-top: 0.7rem;
+  }
+
+  /* ---------- tables ---------- */
+
+  .scroller { overflow-x: auto; border: 1px solid var(--line); background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; min-width: 34rem; }
+
+  caption {
+    text-align: left;
+    padding: 0.85rem 1rem;
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--signal);
+    background: var(--signal-soft);
+    border-bottom: 1px solid var(--line);
+  }
+
+  th, td { padding: 0.7rem 1rem; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+
+  thead th {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    font-weight: 500;
+  }
+
+  tbody th { font-family: var(--display); font-weight: 600; font-size: 0.98rem; }
+  td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; }
+  td.small { font-size: 0.9rem; color: var(--ink-soft); }
+  tbody tr:last-child th, tbody tr:last-child td { border-bottom: 0; }
+
+  /* ---------- library verdicts ---------- */
+
+  .libs { display: flex; flex-direction: column; gap: 0; border-top: 1px solid var(--line); }
+
+  .lib {
+    display: grid;
+    grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
+    gap: 0.55rem 2rem;
+    padding: 1.35rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .lib-name { display: flex; flex-direction: column; gap: 0.5rem; }
+  .lib-name h3 { font-family: var(--mono); font-size: 0.95rem; font-weight: 600; letter-spacing: -0.01em; }
+
+  .tag {
+    align-self: start;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.5rem;
+  }
+
+  .tag.in { color: var(--pass); background: var(--pass-soft); }
+  .tag.out { color: var(--fail); background: var(--fail-soft); }
+  .tag.part { color: var(--signal); background: var(--signal-soft); }
+
+  .lib-body { display: flex; flex-direction: column; gap: 0.5rem; }
+  .lib-body .cost { font-family: var(--mono); font-size: 0.8rem; color: var(--ink-faint); }
+
+  /* ---------- rounds ---------- */
+
+  .rounds { display: flex; flex-direction: column; gap: 1.25rem; }
+
+  .round {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    padding: 1.35rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .round-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.75rem; }
+  .round-head .n { font-family: var(--mono); font-size: 0.78rem; font-weight: 600; color: var(--accent); letter-spacing: 0.12em; }
+  .round-head h3 { font-size: var(--step-2); font-weight: 600; }
+
+  .findings { display: flex; flex-direction: column; gap: 0.85rem; }
+
+  .finding { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.3rem; }
+  .finding .broke { font-family: var(--display); font-weight: 600; font-size: 0.98rem; }
+  .finding .broke::before { content: "Gap — "; color: var(--fail); font-weight: 600; }
+  .finding .fixed { color: var(--ink-soft); font-size: 0.95rem; }
+  .finding .fixed::before { content: "Fix — "; color: var(--pass); font-family: var(--display); font-weight: 600; }
+
+  /* ---------- scorecard ---------- */
+
+  .score-row { display: grid; grid-template-columns: minmax(0, 11rem) minmax(0, 1fr) 4.5rem; gap: 0.75rem 1.25rem; align-items: center; padding: 0.9rem 0; border-bottom: 1px solid var(--line); }
+  .scorecard { border-top: 1px solid var(--line); }
+  .score-row .dim { font-family: var(--display); font-weight: 600; font-size: var(--step-1); }
+
+  .bars { display: flex; flex-direction: column; gap: 0.3rem; }
+  .bar-line { display: grid; grid-template-columns: 3.6rem minmax(0, 1fr); gap: 0.6rem; align-items: center; }
+  .bar-line span { font-family: var(--mono); font-size: 0.68rem; color: var(--ink-faint); letter-spacing: 0.06em; }
+  .track { height: 0.55rem; background: var(--surface-sunk); border: 1px solid var(--line); }
+  .fill { height: 100%; display: block; }
+  .fill.before { background: var(--line-strong); }
+  .fill.after { background: var(--accent); }
+
+  .score-row .final { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: var(--step-2); font-weight: 600; text-align: right; color: var(--ink); }
+
+  .verdict-box {
+    background: var(--pass-soft);
+    border-left: 3px solid var(--pass);
+    padding: 1.35rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .verdict-box h3 { font-size: var(--step-2); font-weight: 700; }
+  .verdict-box p { max-width: 64ch; }
+  .verdict-box .stamp { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--pass); font-weight: 600; }
+
+  /* ---------- phases ---------- */
+
+  .phases { display: flex; flex-direction: column; gap: 0; }
+
+  .phase {
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0, 1fr) minmax(0, 8.5rem);
+    gap: 0.35rem 1.5rem;
+    padding: 1.25rem 0;
+    border-top: 1px solid var(--line);
+    align-items: baseline;
+  }
+
+  .phase:last-child { border-bottom: 1px solid var(--line); }
+  .phase-n { font-family: var(--mono); font-size: var(--step-2); font-weight: 600; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .phase h3 { font-size: var(--step-1); font-weight: 600; }
+  .phase p { grid-column: 2; color: var(--ink-soft); font-size: 0.95rem; }
+
+  .ships { grid-row: 1 / span 2; grid-column: 3; font-family: var(--mono); font-size: 0.74rem; color: var(--ink-faint); line-height: 1.5; }
+
+  /* ---------- asks ---------- */
+
+  .asks {
+    background: var(--surface-sunk);
+    border-left: 3px solid var(--signal);
+    padding: 1.35rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .asks ul { margin: 0; padding-left: 1.1rem; display: flex; flex-direction: column; gap: 0.5rem; }
+  .asks li::marker { color: var(--signal); }
+  .asks li b { font-family: var(--display); font-weight: 600; }
+
+  .foot {
+    font-family: var(--mono);
+    font-size: 0.76rem;
+    color: var(--ink-faint);
+    border-top: 1px solid var(--line);
+    padding-top: 1.25rem;
+    line-height: 1.7;
+  }
+
+  @media (max-width: 46rem) {
+    .decision, .lib { grid-template-columns: 1fr; gap: 0.5rem; }
+    .phase { grid-template-columns: 2.5rem minmax(0, 1fr); }
+    .ships { grid-row: auto; grid-column: 2; }
+    .score-row { grid-template-columns: minmax(0, 1fr) 3.5rem; }
+    .score-row .bars { grid-column: 1 / -1; }
+  }
+</style>
+
+<div class="doc">
+
+  <header class="masthead">
+    <p class="eyebrow">Build plan · v2 · revised over three review rounds · 7 Sep 2026</p>
+    <h1><span class="lv">LvlUp</span> gaming lounge website</h1>
+    <p class="standfirst">Marketing site for a walk-in PS5 lounge, put through three audits — commercial, marketing and SEO, then speed and premium feel — until it survives all five.</p>
+    <dl class="facts">
+      <div class="fact"><dt>Business</dt><dd>PS5 lounge</dd></div>
+      <div class="fact"><dt>Model</dt><dd>Walk-in, hourly</dd></div>
+      <div class="fact"><dt>Currency</dt><dd>INR ₹</dd></div>
+      <div class="fact"><dt>Core pages</dt><dd>4 + SEO set</dd></div>
+      <div class="fact"><dt>Verdict</dt><dd>Ready to build</dd></div>
+    </dl>
+  </header>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">01 — Brief</p>
+      <h2>What the site has to do</h2>
+    </div>
+    <div class="prose">
+      <p>Someone hears about LvlUp, searches the venue name or "PS5 gaming near me", and lands here. They need four answers fast: what stations you have, what an hour costs, where you are, and how to hold a slot. Everything else is secondary.</p>
+      <p>So the site is built around one action — <b>book a station</b> — and around local search, because a lounge only sells to people within a few kilometres. But hourly walk-ins alone do not pay rent. The plan below also chases the two revenue lines that actually carry a lounge: <b>group bookings</b> (one birthday party is worth forty walk-in hours) and <b>repeat regulars</b> (passes, tournament nights, the WhatsApp list).</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">02 — Direction</p>
+      <h2>How it should look and feel</h2>
+    </div>
+    <div class="prose">
+      <p>The obvious move for a gaming brand is neon purple, RGB glow and a black page. Every gaming café in the country already did it, and it reads cheap. LvlUp goes the other way: the room at night. Deep charcoal, one warm light source, everything else quiet. Closer to a listening bar than an internet café — which is also what justifies charging more than the shop down the road.</p>
+    </div>
+
+    <div class="swatches">
+      <div class="swatch">
+        <span class="chip" style="background:#121315"></span>
+        <b>Room</b><span>#121315</span>
+        <em>Page ground. Off-black, never pure #000.</em>
+      </div>
+      <div class="swatch">
+        <span class="chip" style="background:#1B1D20"></span>
+        <b>Surface</b><span>#1B1D20</span>
+        <em>Raised panels, sticky booking bar.</em>
+      </div>
+      <div class="swatch">
+        <span class="chip" style="background:#C8763A"></span>
+        <b>Lamp</b><span>#C8763A</span>
+        <em>The single accent. Buttons, prices, live badges.</em>
+      </div>
+      <div class="swatch">
+        <span class="chip" style="background:#E8E3DC"></span>
+        <b>Paper</b><span>#E8E3DC</span>
+        <em>Headlines and body. Warm white, not stark.</em>
+      </div>
+      <div class="swatch">
+        <span class="chip" style="background:#8A8781"></span>
+        <b>Dim</b><span>#8A8781</span>
+        <em>Secondary text, captions, labels.</em>
+      </div>
+    </div>
+
+    <dl class="decisions">
+      <div class="decision">
+        <dt>Typefaces</dt>
+        <dd>
+          <span class="picked">Satoshi (display) · Geist Mono (data)</span>
+          <span class="why">Every price, hour, station number and countdown sets in mono — an arcade-cabinet cue that also makes the rate card scannable. Headlines stay tight and mid-sized rather than screaming.</span>
+          <span class="instead">Not <b>Inter</b>, not a gamer display face. Self-hosted through <code>next/font</code> so there is no render-blocking font request.</span>
+        </dd>
+      </div>
+      <div class="decision">
+        <dt>Layout</dt>
+        <dd>
+          <span class="picked">Asymmetric split hero, bento station grid, horizontal games shelf</span>
+          <span class="why">Copy and booking button hard left, the room photograph bleeding off the right edge. Stations as a bento of unequal tiles, not three identical cards. Games as a drag-scroll shelf, the way you would actually look along a rack.</span>
+          <span class="instead">No centred hero over a dark image. No three-equal-cards feature row. Both collapse to a single column below 768px.</span>
+        </dd>
+      </div>
+      <div class="decision">
+        <dt>Motion</dt>
+        <dd>
+          <span class="picked">Framer Motion, spring physics, restrained</span>
+          <span class="why">Staggered reveals on the station grid, a magnetic pull on the primary booking button, a live "open now" dot that breathes. All transform and opacity only.</span>
+          <span class="instead">No custom cursor, no scroll hijack, no parallax on mobile. Everything respects <code>prefers-reduced-motion</code>.</span>
+        </dd>
+      </div>
+      <div class="decision">
+        <dt>Glass</dt>
+        <dd>
+          <span class="picked">CSS refraction, not a glass library</span>
+          <span class="why">The sticky booking bar and price chips use <code>backdrop-filter</code> plus a 1px inner highlight and a tinted inner shadow. Reads as physical glass, costs nothing.</span>
+        </dd>
+      </div>
+    </dl>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">03 — Stack</p>
+      <h2>Technical decisions</h2>
+    </div>
+    <dl class="decisions">
+
+      <div class="decision">
+        <dt>Framework</dt>
+        <dd>
+          <span class="picked">Next.js 15, App Router, TypeScript, React Server Components</span>
+          <span class="why">Content pages ship as static HTML with zero client JavaScript. Only leaf components that actually move — booking bar, games shelf, form — carry <code>'use client'</code>.</span>
+          <span class="instead">Instead of <b>plain HTML</b> (dies the moment you want booking) or <b>a Vite SPA</b> (weak local SEO).</span>
+        </dd>
+      </div>
+
+      <div class="decision">
+        <dt>Components</dt>
+        <dd>
+          <span class="picked">shadcn/ui, re-skinned</span>
+          <span class="why">Copied into the repo, not installed as a dependency, so the radii, borders and focus rings get rewritten to the charcoal-and-lamp palette. Used for the form, dialog, sheet, tabs and accordion — the parts where accessibility is easy to get wrong.</span>
+          <span class="instead">Never in default zinc-and-rounded-lg state. A stock shadcn page is recognisable at a glance and undoes the premium argument.</span>
+        </dd>
+      </div>
+
+      <div class="decision">
+        <dt>Styling</dt>
+        <dd>
+          <span class="picked">Tailwind CSS v4, tokens in one file</span>
+          <span class="why">The five palette values above are the only colours in the project. Grid over flex-math for every multi-column layout.</span>
+        </dd>
+      </div>
+
+      <div class="decision">
+        <dt>Content</dt>
+        <dd>
+          <span class="picked">Typed data files in <code>/content</code></span>
+          <span class="why"><code>pricing.ts</code>, <code>stations.ts</code>, <code>games.ts</code>, <code>hours.ts</code>, <code>areas.ts</code>. Changing a rate is a one-line edit. The same files feed the pages, the structured data and the SEO page generation.</span>
+          <span class="instead">Instead of a <b>CMS</b> — overkill for a site you edit a few times a year.</span>
+        </dd>
+      </div>
+
+      <div class="decision">
+        <dt>Booking</dt>
+        <dd>
+          <span class="picked">WhatsApp deep link, primary. Server-action form as fallback.</span>
+          <span class="why">In India the booking conversation already happens on WhatsApp. The button prefills date, station and duration into the chat; you confirm in one reply. Every click fires a tracked event so you can see which page and which section actually produces bookings.</span>
+          <span class="instead">Instead of <b>real-time slot booking</b> — that needs staff keeping a calendar honest all day. Revisit only when walk-in volume forces it.</span>
+        </dd>
+      </div>
+
+      <div class="decision">
+        <dt>Form handling</dt>
+        <dd>
+          <span class="picked">Next.js server action, mail via Resend</span>
+          <span class="why">No third-party embed, no client-side API key. Honeypot field and per-IP rate limit so bots do not fill your inbox. Group-booking enquiries route to a separate subject line — those are the high-value leads.</span>
+        </dd>
+      </div>
+
+      <div class="decision">
+        <dt>Analytics</dt>
+        <dd>
+          <span class="picked">Vercel Analytics plus one custom event set</span>
+          <span class="why">Four events: <code>whatsapp_click</code>, <code>call_click</code>, <code>directions_click</code>, <code>form_submit</code>, each tagged with the page and section. Cookie-free, roughly 1KB, no consent banner needed.</span>
+          <span class="instead">Instead of <b>full GA4</b> — heavier, slower, and needs a cookie notice for a site this small.</span>
+        </dd>
+      </div>
+
+      <div class="decision">
+        <dt>Hosting</dt>
+        <dd>
+          <span class="picked">Vercel, custom domain, Mumbai edge region</span>
+          <span class="why">Free at this traffic, HTTPS and image optimisation included, deploys on git push. Serving from the nearest region shaves real milliseconds for Indian visitors.</span>
+        </dd>
+      </div>
+
+    </dl>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">04 — Sitemap</p>
+      <h2>Four core pages, plus the pages that get found</h2>
+    </div>
+    <div class="pages">
+
+      <article class="page">
+        <div class="page-head"><h3>Home</h3><span class="route">/</span></div>
+        <ol>
+          <li><b>Hero</b><span>Room shot, one line on what LvlUp is, live open/closed state, rate from ₹—/hr, booking button.</span></li>
+          <li><b>Stations</b><span>Bento grid — PS5 bays, racing rig, PC. Screen size, seats, hourly rate on each tile.</span></li>
+          <li><b>Games shelf</b><span>Drag-scroll rack of titles. The single most-asked question before anyone books.</span></li>
+          <li><b>Rates strip</b><span>Three headline prices including the off-peak rate, links to full pricing.</span></li>
+          <li><b>Book the whole place</b><span>Birthdays and team outings. Highest-value block on the page, so it sits above reviews.</span></li>
+          <li><b>Reviews</b><span>Three real Google reviews with first names and the live rating.</span></li>
+          <li><b>Find us</b><span>Map, hours with today marked, landmark, directions and call buttons.</span></li>
+        </ol>
+        <p class="cta-note">CTA: Book on WhatsApp · sticky on mobile</p>
+      </article>
+
+      <article class="page">
+        <div class="page-head"><h3>Pricing</h3><span class="route">/pricing</span></div>
+        <ol>
+          <li><b>Hourly rates</b><span>Per station, per player count, weekday and weekend columns.</span></li>
+          <li><b>Off-peak hours</b><span>The 1–5pm weekday dead zone sold at a lower rate. Fills empty chairs at zero extra cost.</span></li>
+          <li><b>Passes</b><span>10-hour, weekend and monthly bundles with the per-hour saving spelled out.</span></li>
+          <li><b>Parties &amp; buyouts</b><span>Whole-lounge rate, minimum hours, what is included, enquiry form.</span></li>
+          <li><b>Tournaments</b><span>Entry fee, format, prize pool, next date. Marked up as an event so it can surface in search.</span></li>
+          <li><b>What's included</b><span>Controllers, AC, water, chargers — and what costs extra.</span></li>
+          <li><b>Payment &amp; cancellation</b><span>UPI and cash, advance for group bookings, cancellation window.</span></li>
+        </ol>
+        <p class="cta-note">CTA: Book a slot · Enquire about a party</p>
+      </article>
+
+      <article class="page">
+        <div class="page-head"><h3>About</h3><span class="route">/about</span></div>
+        <ol>
+          <li><b>The story</b><span>Why you opened it, in your own words. Short.</span></li>
+          <li><b>The setup</b><span>Consoles, screens, seating, internet speed — the spec sheet gamers check before trusting a place.</span></li>
+          <li><b>House rules</b><span>Age policy, food, footwear, damage, no-shows. Set expectations before they arrive.</span></li>
+          <li><b>Gallery</b><span>Six to eight real photos, lazy-loaded below the fold.</span></li>
+        </ol>
+        <p class="cta-note">CTA: See rates</p>
+      </article>
+
+      <article class="page">
+        <div class="page-head"><h3>Contact</h3><span class="route">/contact</span></div>
+        <ol>
+          <li><b>Booking form</b><span>Name, phone, date, time, station, players, duration. Inline validation, real error and success states.</span></li>
+          <li><b>WhatsApp &amp; call</b><span>Both as buttons, tap-to-dial on mobile.</span></li>
+          <li><b>Map &amp; landmark</b><span>Lazy-loaded map plus a written landmark — people find Indian addresses by landmark, not pin.</span></li>
+          <li><b>Hours</b><span>Per day, today highlighted, open/closed computed live.</span></li>
+          <li><b>Instagram</b><span>Link out. Reels do the marketing; the site closes the booking.</span></li>
+        </ol>
+        <p class="cta-note">CTA: Send booking request</p>
+      </article>
+
+      <article class="page">
+        <div class="page-head"><h3>Area pages</h3><span class="route">/gaming-cafe/[area]</span></div>
+        <ol>
+          <li><b>Three to five only</b><span>One per neighbourhood you genuinely serve. Written by hand, not spun.</span></li>
+          <li><b>Distinct content each</b><span>Real travel time, the landmark people use, which crowd comes from there, parking reality.</span></li>
+          <li><b>Why it matters</b><span>"PS5 gaming in &lt;area&gt;" is the search that converts. Four pages cannot rank for it; these can.</span></li>
+          <li><b>Guardrail</b><span>If a page cannot say something true and specific, it does not get built. Thin duplicates get penalised, not ranked.</span></li>
+        </ol>
+        <p class="cta-note">CTA: Directions from &lt;area&gt;</p>
+      </article>
+
+      <article class="page">
+        <div class="page-head"><h3>Game pages</h3><span class="route">/games/[slug]</span></div>
+        <ol>
+          <li><b>Top eight titles only</b><span>The ones people search by name before they search for a venue.</span></li>
+          <li><b>What's on the page</b><span>Which stations run it, max local players, typical session length, the rate to play it.</span></li>
+          <li><b>Why it matters</b><span>Captures "play EA FC near me" intent that never reaches your homepage.</span></li>
+        </ol>
+        <p class="cta-note">CTA: Book this station</p>
+      </article>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">05 — Content model</p>
+      <h2>Pricing shape</h2>
+    </div>
+    <div class="prose">
+      <p>The rate card is the page people screenshot and forward, so it gets its own typed file and its own <code>Offer</code> markup. Structure below is what the code expects — the numbers are placeholders until your filled sheet comes back.</p>
+    </div>
+    <div class="scroller">
+      <table>
+        <caption>Example figures — replace with LvlUp's real rate card</caption>
+        <thead>
+          <tr><th scope="col">Station</th><th scope="col">Players</th><th scope="col" class="num">Weekday</th><th scope="col" class="num">Weekend</th><th scope="col" class="num">Off-peak</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">PS5 · 55" TV</th><td>1</td><td class="num">₹120</td><td class="num">₹150</td><td class="num">₹90</td></tr>
+          <tr><th scope="row">PS5 · 55" TV</th><td>2</td><td class="num">₹180</td><td class="num">₹220</td><td class="num">₹140</td></tr>
+          <tr><th scope="row">PS5 · 65" + recliner</th><td>2</td><td class="num">₹250</td><td class="num">₹300</td><td class="num">₹190</td></tr>
+          <tr><th scope="row">Racing rig</th><td>1</td><td class="num">₹200</td><td class="num">₹240</td><td class="num">₹150</td></tr>
+          <tr><th scope="row">Whole lounge</th><td>up to 12</td><td class="num">₹1,500</td><td class="num">₹1,800</td><td class="num">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">06 — The 3D question</p>
+      <h2>Verdict on the reference libraries</h2>
+    </div>
+    <div class="prose">
+      <p>You sent three references. They are not equally safe on a site whose visitors are mostly on a mid-range Android over 4G, where every extra second of load costs bookings. Each was judged on one question: does it earn its weight?</p>
+    </div>
+
+    <div class="libs">
+
+      <div class="lib">
+        <div class="lib-name">
+          <h3>shadergradient</h3>
+          <span class="tag part">In, quarantined</span>
+        </div>
+        <div class="lib-body">
+          <p>Used for exactly one thing: a slow-moving light wash behind the hero, standing in for the glow of screens in a dark room. It is the single most premium-feeling element on the site and it costs the most, so it is fenced in hard — loaded through <code>next/dynamic</code> with <code>ssr: false</code>, mounted only after the page is interactive and idle, and only when the viewport is 768px or wider, the connection reports 4g, the device reports 4GB or more of memory, and reduced-motion is off. Everyone else gets a static WebP frame exported from the same shader, so the art is identical and the largest paint is always just an image.</p>
+          <p class="cost">cost: three + @react-three/fiber + three-stdlib + camera-controls ≈ 160KB gzip · never on the critical path · never on mobile</p>
+        </div>
+      </div>
+
+      <div class="lib">
+        <div class="lib-name">
+          <h3>React Three Fiber</h3>
+          <span class="tag part">In, as the host only</span>
+        </div>
+        <div class="lib-body">
+          <p>Arrives as shadergradient's dependency, so it is already paid for. The examples gallery informs the hero composition and nothing else. No 3D station cards, no scroll-linked scene, no model loading — a spinning PS5 model would add megabytes to sell a product the visitor already knows what it looks like.</p>
+          <p class="cost">cost: shared with shadergradient · same lazy gate</p>
+        </div>
+      </div>
+
+      <div class="lib">
+        <div class="lib-name">
+          <h3>liquid-glass-js</h3>
+          <span class="tag out">Out — look kept, library dropped</span>
+        </div>
+        <div class="lib-body">
+          <p>It is genuinely beautiful and genuinely wrong for this site. It is a vanilla script-tag library, not a React component, so it fights Server Components. It requires WebGL 2 and it drives refraction by rasterising the page with html2canvas — screenshotting the DOM behind every glass element, repeatedly, on a phone. That is a frame-rate collapse on the exact devices your customers hold, and a Safari-14-and-up floor on top.</p>
+          <p>The effect it sells is reproduced in CSS for free: <code>backdrop-filter: blur(18px) saturate(140%)</code>, a <code>1px</code> inner highlight at 10% white, and an inset shadow tinted to the charcoal ground. Applied to the sticky booking bar, the price chips and the nav. Same read, no WebGL, works everywhere.</p>
+          <p class="cost">cost avoided: html2canvas ≈ 48KB gzip plus continuous GPU repaint</p>
+        </div>
+      </div>
+
+      <div class="lib">
+        <div class="lib-name">
+          <h3>shadcn/ui</h3>
+          <span class="tag in">In</span>
+        </div>
+        <div class="lib-body">
+          <p>Copied into the repo and re-skinned to the palette above. Accessible primitives for form, dialog, sheet, tabs and accordion — focus rings, keyboard traps and ARIA handled properly rather than reinvented. Only the components actually used get copied, so nothing unused ships.</p>
+          <p class="cost">cost: only what is imported · no runtime dependency</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">07 — Budget</p>
+      <h2>Performance targets, and what enforces them</h2>
+    </div>
+    <div class="prose">
+      <p>Measured on a throttled mid-range Android over simulated 4G, not on a laptop. A target without a mechanism is a wish, so each row names the thing that holds it.</p>
+    </div>
+    <div class="scroller">
+      <table>
+        <thead>
+          <tr><th scope="col">Metric</th><th scope="col" class="num">Target</th><th scope="col">Held by</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Largest Contentful Paint</th><td class="num">&lt; 2.0s</td><td class="small">Hero is always an image — priority next/image, AVIF with WebP fallback, explicit dimensions. The shader can only replace it after paint.</td></tr>
+          <tr><th scope="row">Interaction to Next Paint</th><td class="num">&lt; 200ms</td><td class="small">Server Components everywhere; interactive work isolated in memoised leaf components so nothing re-renders the page.</td></tr>
+          <tr><th scope="row">Cumulative Layout Shift</th><td class="num">&lt; 0.05</td><td class="small">Every image and embed has reserved dimensions. Fonts self-hosted with <code>size-adjust</code> so the swap does not reflow.</td></tr>
+          <tr><th scope="row">First-load JS, mobile</th><td class="num">&lt; 130KB</td><td class="small">Budget checked in CI on every pull request. The 3D bundle sits outside it by construction — it never loads on mobile.</td></tr>
+          <tr><th scope="row">Lighthouse mobile</th><td class="num">≥ 92</td><td class="small">Run against the Vercel preview URL on each deploy; a drop blocks the merge.</td></tr>
+          <tr><th scope="row">Total page weight</th><td class="num">&lt; 900KB</td><td class="small">Photos resized to the largest size actually displayed, gallery lazy-loaded, map embedded only after a click.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">08 — Review loop</p>
+      <h2>Three rounds, and what each one broke</h2>
+    </div>
+    <div class="prose">
+      <p>The v1 plan was reviewed three times, each round against a different lens, each round rewriting the plan before the next one started. The gaps below are real defects that were in the plan you first saw.</p>
+    </div>
+
+    <div class="rounds">
+
+      <div class="round">
+        <div class="round-head">
+          <span class="n">ROUND 01</span>
+          <h3>Commercial</h3>
+        </div>
+        <div class="findings">
+          <div class="finding">
+            <p class="broke">Nothing measured whether the site sold anything.</p>
+            <p class="fixed">Four tracked events on WhatsApp, call, directions and form, each tagged with page and section, so you can see which part of which page produces bookings and cut the rest.</p>
+          </div>
+          <div class="finding">
+            <p class="broke">The highest-value product was buried on page two.</p>
+            <p class="fixed">Parties and lounge buyouts get their own block on the home page and a dedicated enquiry route. One birthday booking is worth roughly forty walk-in hours.</p>
+          </div>
+          <div class="finding">
+            <p class="broke">No answer to the empty weekday afternoon.</p>
+            <p class="fixed">Off-peak pricing added as a first-class rate column and surfaced on the home page. Selling a dead chair at a discount is pure margin.</p>
+          </div>
+          <div class="finding">
+            <p class="broke">Nothing brought anyone back a second time.</p>
+            <p class="fixed">Passes promoted with the per-hour saving shown, tournament dates given real event markup, and an opt-in on the booking form for the WhatsApp announcements list.</p>
+          </div>
+          <div class="finding">
+            <p class="broke">A first-time visitor had no reason to trust the place.</p>
+            <p class="fixed">Live rating and real reviews with names, an explicit what-you-get list, and house rules stated up front so nobody arrives to a surprise.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="round">
+        <div class="round-head">
+          <span class="n">ROUND 02</span>
+          <h3>Marketing &amp; SEO</h3>
+        </div>
+        <div class="findings">
+          <div class="finding">
+            <p class="broke">Four pages is almost no surface to rank on.</p>
+            <p class="fixed">Three to five hand-written area pages and eight game pages, each carrying content that is genuinely different. Enough surface to catch neighbourhood and title searches, small enough to stay honest.</p>
+          </div>
+          <div class="finding">
+            <p class="broke">Structured data stopped at the business listing.</p>
+            <p class="fixed">Added <code>Offer</code> for passes, <code>Event</code> for tournament nights, <code>FAQPage</code> for the rules and <code>AggregateRating</code> for reviews, all generated from the same typed content files so they can never drift from the visible page.</p>
+          </div>
+          <div class="finding">
+            <p class="broke">Ignored the channel that actually decides local ranking.</p>
+            <p class="fixed">Site treated as feeder to the Google Business Profile: name, address and hours match it character for character, and an exit QR code points at the review form. For a venue, the map listing outranks the website.</p>
+          </div>
+          <div class="finding">
+            <p class="broke">Links get shared on WhatsApp with no preview.</p>
+            <p class="fixed">Per-page Open Graph images generated at build time — the rate card page previews as the rate card. In a market where sharing happens in group chats, that image is the advertisement.</p>
+          </div>
+          <div class="finding">
+            <p class="broke">Instagram traffic had nowhere to land.</p>
+            <p class="fixed">A link-in-bio route with UTM tags that pushes straight to booking, so reel traffic is attributable instead of anonymous.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="round">
+        <div class="round-head">
+          <span class="n">ROUND 03</span>
+          <h3>Speed &amp; premium</h3>
+        </div>
+        <div class="findings">
+          <div class="finding">
+            <p class="broke">"Premium" and "fast" were asserted, never reconciled.</p>
+            <p class="fixed">A written budget with numbers and an enforcing mechanism per row, checked in CI. The 3D moment is allowed only because it is architecturally incapable of touching the largest paint.</p>
+          </div>
+          <div class="finding">
+            <p class="broke">One reference library would have wrecked mobile.</p>
+            <p class="fixed">liquid-glass-js rejected on inspection — it rasterises the DOM with html2canvas every frame and needs WebGL 2. The look rebuilt in CSS instead, at zero cost and with wider support.</p>
+          </div>
+          <div class="finding">
+            <p class="broke">No visual identity, only a component list.</p>
+            <p class="fixed">A committed direction: the room at night, one warm accent, mono numerals, asymmetric layout. Specific enough to reject work that does not fit, which is what a direction is for.</p>
+          </div>
+          <div class="finding">
+            <p class="broke">Default component styling would have undone the premium claim.</p>
+            <p class="fixed">shadcn/ui re-skinned before use — own radii, own borders, own focus rings. A stock install is recognisable on sight.</p>
+          </div>
+          <div class="finding">
+            <p class="broke">Accessibility was never mentioned, which on a dark site is where it breaks.</p>
+            <p class="fixed">Contrast checked against the charcoal ground, visible focus states on every control, motion gated on <code>prefers-reduced-motion</code>, and the whole booking flow completable by keyboard.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">09 — Verdict</p>
+      <h2>Where the plan stands</h2>
+    </div>
+    <div class="prose">
+      <p>Scored out of ten on each dimension: where v1 stood, and where the plan stands after three rounds.</p>
+    </div>
+
+    <div class="scorecard">
+
+      <div class="score-row">
+        <span class="dim">Commercial</span>
+        <div class="bars">
+          <div class="bar-line"><span>v1</span><div class="track"><span class="fill before" style="width:40%"></span></div></div>
+          <div class="bar-line"><span>now</span><div class="track"><span class="fill after" style="width:90%"></span></div></div>
+        </div>
+        <span class="final">9</span>
+      </div>
+
+      <div class="score-row">
+        <span class="dim">Marketing</span>
+        <div class="bars">
+          <div class="bar-line"><span>v1</span><div class="track"><span class="fill before" style="width:30%"></span></div></div>
+          <div class="bar-line"><span>now</span><div class="track"><span class="fill after" style="width:80%"></span></div></div>
+        </div>
+        <span class="final">8</span>
+      </div>
+
+      <div class="score-row">
+        <span class="dim">SEO</span>
+        <div class="bars">
+          <div class="bar-line"><span>v1</span><div class="track"><span class="fill before" style="width:50%"></span></div></div>
+          <div class="bar-line"><span>now</span><div class="track"><span class="fill after" style="width:90%"></span></div></div>
+        </div>
+        <span class="final">9</span>
+      </div>
+
+      <div class="score-row">
+        <span class="dim">Speed</span>
+        <div class="bars">
+          <div class="bar-line"><span>v1</span><div class="track"><span class="fill before" style="width:60%"></span></div></div>
+          <div class="bar-line"><span>now</span><div class="track"><span class="fill after" style="width:90%"></span></div></div>
+        </div>
+        <span class="final">9</span>
+      </div>
+
+      <div class="score-row">
+        <span class="dim">Premium</span>
+        <div class="bars">
+          <div class="bar-line"><span>v1</span><div class="track"><span class="fill before" style="width:20%"></span></div></div>
+          <div class="bar-line"><span>now</span><div class="track"><span class="fill after" style="width:80%"></span></div></div>
+        </div>
+        <span class="final">8</span>
+      </div>
+
+    </div>
+
+    <div class="verdict-box">
+      <p class="stamp">Verdict · round 3 · ready to build</p>
+      <h3>The plan is done. The content is not.</h3>
+      <p>Nothing else is worth adding on paper — a fourth round would be polish on a document instead of progress on a site. Phases 1 through 4 can start today against placeholders.</p>
+      <p>Two things still decide whether this works, and neither is engineering. <b>Photographs</b>: the entire premium argument rests on the room looking as good as the site says it does, and no amount of shader work rescues bad photos of a good lounge. <b>The real rate card</b>: pricing is the page people screenshot, and it has to be exact before launch. Both are on you, and they are the only reason this plan cannot reach production.</p>
+      <p>The scores that sit at 8 rather than 9 stay there deliberately — marketing and premium are proven by traffic and by how the finished thing feels, not by a document claiming them.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">10 — Sequence</p>
+      <h2>Build phases</h2>
+    </div>
+    <div class="phases">
+
+      <div class="phase">
+        <span class="phase-n">01</span>
+        <h3>Foundation and design system</h3>
+        <p>Next.js app, Tailwind tokens from the palette, self-hosted fonts, re-skinned shadcn primitives, header, footer, sticky booking bar. CI performance budget wired up on day one so nothing can quietly get slow.</p>
+        <span class="ships">ships: live preview link</span>
+      </div>
+
+      <div class="phase">
+        <span class="phase-n">02</span>
+        <h3>Home page</h3>
+        <p>All seven sections built with placeholder copy and correctly-shaped placeholder imagery, so layout is settled before your photos arrive. Static hero image only — no shader yet.</p>
+        <span class="ships">ships: /</span>
+      </div>
+
+      <div class="phase">
+        <span class="phase-n">03</span>
+        <h3>Pricing and About</h3>
+        <p>Rate tables driven by <code>pricing.ts</code>, off-peak and passes, party enquiry block, house rules, gallery grid.</p>
+        <span class="ships">ships: /pricing, /about</span>
+      </div>
+
+      <div class="phase">
+        <span class="phase-n">04</span>
+        <h3>Contact, booking and tracking</h3>
+        <p>Form with validation and real error, loading and success states; server action; mail delivery; spam guard. WhatsApp prefill wired to the real number, all four analytics events live.</p>
+        <span class="ships">ships: /contact</span>
+      </div>
+
+      <div class="phase">
+        <span class="phase-n">05</span>
+        <h3>SEO surface</h3>
+        <p>Area and game pages written by hand from your inputs. Full structured data set, sitemap, per-page Open Graph images, Google Business Profile aligned to match.</p>
+        <span class="ships">ships: /gaming-cafe/*, /games/*</span>
+      </div>
+
+      <div class="phase">
+        <span class="phase-n">06</span>
+        <h3>The premium layer</h3>
+        <p>Hero shader behind its load gate with the static frame exported from it, glass treatment on the booking bar, motion choreography, magnetic button. Last, deliberately — added only once the site is already fast, so the budget catches any regression immediately.</p>
+        <span class="ships">ships: the finish</span>
+      </div>
+
+      <div class="phase">
+        <span class="phase-n">07</span>
+        <h3>Real content and launch</h3>
+        <p>Your photos, prices, hours and address swapped in. Accessibility and contrast pass, Lighthouse run on a real mid-range phone, domain pointed at Vercel.</p>
+        <span class="ships">ships: production site</span>
+      </div>
+
+      <div class="phase">
+        <span class="phase-n">08</span>
+        <h3>Later, only if the numbers demand it</h3>
+        <p>Slot-level booking with payment, memberships, tournament sign-ups. Held back deliberately — none of it earns its keep until the tracked events prove the demand exists.</p>
+        <span class="ships">ships: on request</span>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">11 — Blockers</p>
+      <h2>What I need from you</h2>
+    </div>
+    <div class="asks">
+      <p>Phases 1 to 4 and 6 can run on placeholders. Phases 5 and 7 cannot start until these land — they are the tabs in the spreadsheet you have:</p>
+      <ul>
+        <li><b>Photos</b> — eight to ten, shot horizontally, lights on, place tidy. Ranked first on purpose: this is the highest-impact item in the entire project.</li>
+        <li><b>Real rate card</b> — hourly, weekend, off-peak, passes, buyout, tournament entry.</li>
+        <li><b>Venue name and full address</b>, plus the landmark people actually use.</li>
+        <li><b>Opening hours</b> per day, including different weekend hours.</li>
+        <li><b>WhatsApp number</b> for bookings, and a phone number if different.</li>
+        <li><b>Station inventory</b> — how many PS5s, screen sizes, racing rig or PC, seats per station.</li>
+        <li><b>Games list</b> — what is installed right now. The top eight become their own pages.</li>
+        <li><b>Areas you serve</b> — three to five neighbourhoods, and roughly how people travel from each.</li>
+        <li><b>Three real reviews</b>, copied verbatim, with first names.</li>
+        <li><b>Domain</b> — bought already, or should I suggest one?</li>
+        <li><b>Instagram handle</b> and Google Business Profile link.</li>
+      </ul>
+    </div>
+  </section>
+
+  <p class="foot">
+    Prepared for LvlUp · v2, revised across three review rounds · placeholder figures marked as examples throughout · say go and phase 01 starts.
+  </p>
+
+</div>

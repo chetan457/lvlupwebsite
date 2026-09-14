@@ -1,0 +1,477 @@
+@import 'tailwindcss';
+
+/*
+  Two themes, one vocabulary.
+
+  Embers  — the room at night: charcoal ground, one warm light source.
+  Midnight — graphite and PlayStation blue, 90% neutral to 10% blue.
+
+  Components never name a colour. They name a role, and the theme decides what
+  that role looks like, which is why adding the second palette touched this file
+  and almost nothing else.
+*/
+@theme {
+  /*
+    Two themes share one set of semantic names, so no component knows which is
+    running. `lamp` is the fill a button is painted with; `accent` is the colour
+    text and icons are allowed to be. They are the same hue in Embers, and
+    deliberately different in Midnight — Midnight's primary #0070D1 is only
+    4.09:1 on its background, which is fine behind white button text (4.95:1)
+    and fails AA as small text. Splitting the two is what keeps both themes
+    accessible without softening either palette.
+  */
+
+  /* --- Embers (default): the room at night, one warm light source --- */
+  --color-room: #121315;
+  --color-room-deep: #0c0d0f;
+  --color-surface: #1b1d20;
+  --color-surface-hi: #23262a;
+  --color-lamp: #c8763a;
+  --color-lamp-hi: #d68345;
+  --color-lamp-ink: #17100a;
+  --color-accent: #c8763a;
+  --color-screen: #5c86b4;
+  --color-paper: #e8e3dc;
+  --color-dim: #9d9a93;
+  --color-dimmer: #6e6c67;
+  --color-edge: rgba(232, 227, 220, 0.1);
+  --color-edge-hi: rgba(232, 227, 220, 0.18);
+  --color-live: #6fcf97;
+  --color-alarm: #e4867f;
+  --color-accent-mute: #c7a98c;
+
+  /* raw channels, so effects can compose their own alpha from the theme */
+  --ch-accent: 200 118 58;
+  --ch-screen: 92 134 180;
+  --ch-room: 18 19 21;
+  --ch-surface: 27 29 32;
+  --ch-paper: 232 227 220;
+
+  --font-sans: var(--font-geist-sans), 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --radius-base: 12px;
+  --radius-card: 14px;
+  --radius-control: 10px;
+  --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --weight-heading: 600;
+  --tracking-heading: -0.028em;
+
+  --shadow-card: 0 18px 44px -24px rgb(0 0 0 / 0.7);
+  --shadow-glow: 0 0 0 rgb(0 0 0 / 0);
+  --fx-feature-tile: linear-gradient(155deg, #24211d 0%, #1b1d20 62%);
+}
+
+/*
+  --- LVLUP Midnight: graphite and PlayStation blue ---
+
+  90% neutral, 10% blue. Blue is reserved for the things that are active,
+  interactive or being hovered — which is why `--shadow-glow` is a token rather
+  than something sprinkled on every surface: exactly three components spend it.
+*/
+[data-theme='midnight'] {
+  --color-room: #050608;
+  --color-room-deep: #030405;
+  --color-surface: #0c0f14;
+  --color-surface-hi: #151a21;
+  --color-lamp: #0070d1;
+  --color-lamp-hi: #0a84e8;
+  --color-lamp-ink: #ffffff;
+  --color-accent: #00a8ff;
+  --color-screen: #00a8ff;
+  --color-paper: #f5f7fa;
+  --color-dim: #a7b0bb;
+  --color-dimmer: #7d8590;
+  --color-edge: #1a2029;
+  --color-edge-hi: #232d3a;
+  --color-live: #34d399;
+  --color-alarm: #ef4444;
+  --color-accent-mute: #9ec7e8;
+
+  --ch-accent: 0 168 255;
+  --ch-screen: 0 112 209;
+  --ch-room: 5 6 8;
+  --ch-surface: 12 15 20;
+  --ch-paper: 245 247 250;
+
+  /* heavier, tighter headings — the graphite palette can carry the weight */
+  --weight-heading: 700;
+  --tracking-heading: -0.02em;
+
+  --shadow-card: 0 8px 30px rgb(0 0 0 / 0.35);
+  --shadow-glow: 0 0 30px rgb(0 112 209 / 0.15);
+  --fx-feature-tile: linear-gradient(155deg, #101821 0%, #0c0f14 62%);
+}
+
+/*
+  Effect tokens. Every gradient and glow in the app resolves through these, so
+  switching theme repaints the atmosphere rather than just the flat colours.
+*/
+:root {
+  --glow-accent: rgb(var(--ch-accent) / 0.3);
+  --glow-accent-soft: rgb(var(--ch-accent) / 0.2);
+  --glow-accent-faint: rgb(var(--ch-accent) / 0.14);
+  --edge-lit: rgb(var(--ch-paper) / 0.16);
+  --edge-lit-fade: rgb(var(--ch-paper) / 0.02);
+
+  --fx-room-paint:
+    radial-gradient(58% 52% at 74% 26%, rgb(var(--ch-accent) / 0.34) 0%, rgb(var(--ch-accent) / 0) 62%),
+    radial-gradient(52% 46% at 22% 74%, rgb(var(--ch-screen) / 0.24) 0%, rgb(var(--ch-screen) / 0) 64%),
+    linear-gradient(178deg, rgb(var(--ch-paper) / 0.04) 0%, var(--color-room) 82%);
+
+  /*
+    Weighted hard to the left, where the copy lives. The hero photograph is
+    stock today and the venue's own tomorrow, so the scrim has to hold AA
+    contrast over an image whose brightness nobody controls.
+  */
+  --fx-scrim-wide: linear-gradient(
+    96deg,
+    var(--color-room) 0%,
+    rgb(var(--ch-room) / 0.94) 36%,
+    rgb(var(--ch-room) / 0.82) 60%,
+    rgb(var(--ch-room) / 0.28) 78%,
+    rgb(var(--ch-room) / 0.36) 100%
+  );
+
+  --fx-scrim-narrow: linear-gradient(
+    to bottom,
+    rgb(var(--ch-room) / 0.5) 0%,
+    rgb(var(--ch-room) / 0.8) 52%,
+    var(--color-room) 100%
+  );
+
+  --fx-image-foot: linear-gradient(to top, rgb(var(--ch-room) / 0.38) 0%, rgb(var(--ch-room) / 0) 42%);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* the sticky header must not cover an anchor target */
+    scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-room);
+    color: var(--color-paper);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    /* clip, never hidden — hidden makes body a scroll container and kills sticky */
+    overflow-x: clip;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: var(--weight-heading);
+    letter-spacing: var(--tracking-heading);
+    line-height: 1.1;
+    text-wrap: balance;
+  }
+
+  /* the palette swap is a deliberate act, so let it cross-fade rather than snap */
+  body,
+  .glass {
+    transition:
+      background-color 0.35s var(--ease-out-soft),
+      border-color 0.35s var(--ease-out-soft),
+      color 0.35s var(--ease-out-soft);
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-lamp);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /*
+    Film grain, fixed so scrolling never repaints it — and desktop only.
+    A full-viewport composited layer above every other element costs real
+    render time on a phone, and at phone pixel density the grain is invisible
+    anyway. It buys atmosphere where there is headroom for it and nowhere else.
+  */
+  @media (min-width: 64rem) and (pointer: fine) {
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      pointer-events: none;
+      opacity: 0.22;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+    }
+  }
+}
+
+@layer components {
+  .shell {
+    width: 100%;
+    max-width: 78rem;
+    margin-inline: auto;
+    padding-inline: clamp(1.15rem, 4vw, 3rem);
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-dim);
+  }
+
+  /* glass: backdrop blur, a 1px inner highlight, a shadow tinted to the ground */
+  .glass {
+    background-color: rgb(var(--ch-surface) / 0.66);
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    border: 1px solid var(--color-edge-hi);
+    box-shadow:
+      inset 0 1px 0 rgb(var(--ch-paper) / 0.12),
+      0 24px 60px -24px rgb(0 0 0 / 0.75);
+  }
+
+  /*
+    The 10% of the palette that is allowed to be blue. Spent on exactly the
+    things the theme brief names — active, interactive, important — and nowhere
+    else. In Embers the glow token resolves to nothing, so this is a no-op.
+  */
+  .lit {
+    box-shadow: var(--shadow-card), var(--shadow-glow);
+  }
+
+  .lit-hover {
+    transition: box-shadow 0.3s var(--ease-out-soft);
+  }
+
+  .lit-hover:hover,
+  .lit-hover:focus-within {
+    box-shadow: var(--shadow-card), var(--shadow-glow);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ------------------------------------------------------------------
+   The hero room.
+
+   Five screens on a wall receding into the dark — the object IS the
+   floorplan, so the five bays we sell are the five things you see.
+   Pure CSS 3D: no WebGL, no canvas, no image, no request.
+
+   Lifted from the design round at /tmp/hero-final.html with one change.
+   That version lit the focal screen blue only while the lounge was open,
+   which left the hero with no accent at all for the fourteen hours a day
+   it is shut. The screen is now always lit and simply brighter when open,
+   so the composition keeps its focal point around the clock.
+   ------------------------------------------------------------------ */
+.hero-room .stage {
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 44%; right: 0;
+  z-index: 1;
+  perspective: 1250px;
+  perspective-origin: 56% 42%;
+  pointer-events: none;
+  /* One mask layer. Two would need mask-composite to intersect, and
+     where that is unsupported they add instead — leaving a hard-edged
+     wall beside the headline. The vertical fade is painted instead,
+     which over a flat ground is exactly equivalent. */
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 30%, #000 92%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, #000 30%, #000 92%, transparent 100%);
+}
+
+.hero-room .stage__fade {
+  position: absolute;
+  inset: 0;
+  transform: translateZ(1px);
+  background: linear-gradient(to bottom,
+    var(--color-room) 0%, rgb(5 6 8 / 0) 22%, rgb(5 6 8 / 0) 74%, var(--color-room) 100%);
+}
+
+.hero-room .room { position: absolute; inset: 0; transform-style: preserve-3d; }
+
+/* The wall. Its right edge is the one nearest you; everything else runs
+   away down the room. transform-origin pins that near edge.
+     translateZ — how far back the near edge stands (the dolly)
+     rotateY    — how hard the wall turns away (the corridor)          */
+.hero-room .wall {
+  position: absolute;
+  right: 0; top: 42%;
+  width: 2200px; height: 520px;
+  margin-top: -210px;
+  transform-origin: 100% 50%;
+  transform: translateX(-20px) translateZ(-300px) rotateY(-53deg);
+  transform-style: preserve-3d;
+  background: linear-gradient(to bottom, #090c11 0%, #06080c 56%, #050608 100%);
+}
+/* the two architectural edges: ceiling junction and floor junction */
+.hero-room .wall::before,
+.hero-room .wall::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  height: 1px;
+}
+.hero-room .wall::before { top: 0;    background: rgb(245 247 250 / 0.075); }
+.hero-room .wall::after  { bottom: 0; background: rgb(245 247 250 / 0.10); }
+
+.hero-room .floor {
+  position: absolute;
+  left: -700px; top: 100%;
+  width: 3800px; height: 800px;
+  transform-origin: 50% 0%;
+  transform: rotateX(90deg);
+  background: linear-gradient(to bottom, #080b10 0%, #050609 44%, #040507 100%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 38%, transparent 94%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 38%, transparent 94%);
+}
+/* tile joints: the cheapest way to say "floor, and it recedes" */
+.hero-room .floor::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(to right, rgb(245 247 250 / 0.07) 0 2px, transparent 2px 240px);
+  -webkit-mask-image: linear-gradient(to bottom, rgb(0 0 0 / 0.3) 0%, #000 30%, transparent 84%);
+  mask-image: linear-gradient(to bottom, rgb(0 0 0 / 0.3) 0%, #000 30%, transparent 84%);
+}
+
+/* the far end, so the room closes rather than dissolving */
+.hero-room .backwall {
+  position: absolute;
+  left: 0; top: 0;
+  width: 1100px; height: 520px;
+  transform-origin: 0% 50%;
+  transform: rotateY(90deg);
+  background: linear-gradient(to bottom, #06080c 0%, #040608 100%);
+}
+
+/* --- the five screens ---------------------------------------------- */
+
+.hero-room .bay {
+  position: absolute;
+  top: 116px;
+  width: 320px; height: 184px;
+  transform-style: preserve-3d;
+}
+
+.hero-room .screen {
+  position: absolute;
+  inset: 0;
+  border-radius: 3px;
+  /* hard rim: brightest on the top and on the near (right) edge, which
+     is where the light in this room actually falls */
+  /* Edges, not atmosphere. Lifted from the design review: if you cannot
+     count five in one glance the object is failing at the one thing it is
+     there to say. */
+  border: 1px solid rgb(245 247 250 / 0.22);
+  border-top-color: rgb(245 247 250 / 0.5);
+  border-right-color: rgb(245 247 250 / 0.38);
+  background: linear-gradient(184deg, #1b222c 0%, #11171f 52%, #0b1016 100%);
+  box-shadow: 0 20px 44px -26px rgb(0 0 0 / 0.9);
+  overflow: hidden;
+}
+/* a horizon inside the panel: enough to read as something running on a
+   screen, never enough to read as a picture */
+.hero-room .screen::before {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; top: 54%; bottom: 0;
+  background: linear-gradient(to bottom, rgb(5 6 8 / 0.55) 0%, rgb(5 6 8 / 0.88) 100%);
+}
+.hero-room .screen::after {
+  content: '';
+  position: absolute;
+  left: 14%; right: 14%; top: 26%;
+  height: 2px;
+  background: rgb(245 247 250 / 0.14);
+}
+/* no two are showing the same thing. The bays are the wall's 3rd..7th
+   children — floor and far wall come first, they have to paint under. */
+.hero-room .bay:nth-child(3) .screen::after { left: 30%; right: 9%;  top: 36%; }
+.hero-room .bay:nth-child(4) .screen::after { left: 11%; right: 45%; top: 21%; }
+.hero-room .bay:nth-child(5) .screen::after { left: 22%; right: 22%; top: 43%; }
+.hero-room .bay:nth-child(6) .screen::after { left: 8%;  right: 34%; top: 30%; }
+
+.hero-room .bay__mount {
+  position: absolute;
+  left: 45%; right: 45%; top: 100%;
+  height: 13px;
+  background: rgb(245 247 250 / 0.07);
+}
+
+/* THE FOCAL OBJECT. Exactly one screen is lit, and it is lit only while
+   the door is open — the room runs off the lounge's clock, same as the
+   badge. Shut, it holds the composition in neutral light instead. */
+.hero-room .bay--lit .screen {
+  /* standby: the same blue, held back. Never neutral, or the hero loses
+     its only accent every night. */
+  border-color: rgb(0 168 255 / 0.18);
+  border-top-color: rgb(0 168 255 / 0.42);
+  border-right-color: rgb(0 168 255 / 0.28);
+  background: linear-gradient(186deg, rgb(0 168 255 / 0.14) 0%, rgb(0 112 209 / 0.07) 54%, #0d131a 100%);
+  box-shadow: 0 0 70px 4px rgb(0 112 209 / 0.07), 0 20px 44px -26px rgb(0 0 0 / 0.9);
+}
+.hero-room .bay--lit .screen::after { background: rgb(0 168 255 / 0.34); }
+
+.hero-room[data-open="true"] .bay--lit .screen {
+  border-color: rgb(0 168 255 / 0.34);
+  border-top-color: rgb(0 168 255 / 0.72);
+  border-right-color: rgb(0 168 255 / 0.5);
+  background: linear-gradient(186deg, rgb(0 168 255 / 0.32) 0%, rgb(0 112 209 / 0.16) 54%, rgb(0 112 209 / 0.05) 100%), #10161e;
+  box-shadow: 0 0 110px 12px rgb(0 112 209 / 0.16), 0 20px 44px -26px rgb(0 0 0 / 0.9);
+  animation: flicker 9s ease-in-out 1.6s infinite;
+}
+.hero-room[data-open="true"] .bay--lit .screen::after { background: rgb(0 168 255 / 0.6); }
+.hero-room[data-open="true"] .bay--lit .screen::before { background: linear-gradient(to bottom, rgb(3 8 14 / 0.32) 0%, rgb(3 8 14 / 0.7) 100%); }
+
+/* the one pool of light on the floor, under the one lit screen */
+.hero-room .pool {
+  position: absolute;
+  width: 460px; height: 400px;
+  margin-left: -230px;
+  border-radius: 50%;
+  background: radial-gradient(50% 50% at 50% 50%, rgb(0 112 209 / 0.10) 0%, rgb(0 112 209 / 0) 68%);
+}
+.hero-room[data-open="true"] .pool {
+  background: radial-gradient(50% 50% at 50% 50%, rgb(0 168 255 / 0.22) 0%, rgb(0 112 209 / 0.07) 42%, rgb(0 112 209 / 0) 72%);
+}
+
+/* Below lg the room drops under the copy as a band. Scaled, not cropped —
+   a cropped room loses the screen count, which is the only thing it is
+   there to say. */
+@media (max-width: 63.99rem) {
+  .hero-room .stage {
+    left: 0;
+    top: auto;
+    height: 15rem;
+    perspective: 900px;
+    perspective-origin: 62% 40%;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 26%, #000 88%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 26%, #000 88%, transparent 100%);
+  }
+  .hero-room .wall { transform: translateX(60px) translateZ(-520px) rotateY(-53deg) scale(0.86); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-room .screen { animation: none !important; }
+}
