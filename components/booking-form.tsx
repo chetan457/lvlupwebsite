@@ -201,7 +201,7 @@ export function BookingForm() {
                 type="tel"
                 autoComplete="tel"
                 inputMode="tel"
-                placeholder="98867 41290"
+                placeholder="84016 65488"
                 value={values.phone}
                 onChange={(event) => set('phone')(event.target.value)}
               />
