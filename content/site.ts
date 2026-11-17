@@ -44,8 +44,8 @@ export const site = {
   geo: { lat: 18.5484, lng: 73.9042 },
   mapsUrl: 'https://maps.google.com/?q=Kalyani+Nagar+Pune',
 
-  instagram: 'https://instagram.com/lvlup.lounge',
-  instagramHandle: '@lvlup.lounge',
+  instagram: 'https://www.instagram.com/lvluplounge41/',
+  instagramHandle: '@lvluplounge41',
 
   rating: { value: 4.7, count: 23 },
   priceRange: '₹₹',
